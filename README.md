@@ -5,14 +5,14 @@ AIエージェントから YouTube、TikTok、Instagram、X、Threads、Facebook
 ## インストール
 
 ```bash
-npx skills add post-mesh-hq/agent-skills
+npx skills add hid3h/post-mesh-agent-skills
 ```
 
 手動でインストールする場合:
 
 ```bash
-git clone https://github.com/post-mesh-hq/agent-skills.git
-ln -s "$(pwd)/agent-skills/skills/post-mesh" ~/.claude/skills/post-mesh
+git clone https://github.com/hid3h/post-mesh-agent-skills.git
+ln -s "$(pwd)/post-mesh-agent-skills/skills/post-mesh" ~/.claude/skills/post-mesh
 ```
 
 ## セットアップ
