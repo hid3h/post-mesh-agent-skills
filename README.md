@@ -1,66 +1,64 @@
 # post mesh — Agent Skills
 
-AI agent skills for [post mesh](https://post-mesh.com), a multi-platform social media posting service.
+AIエージェントから YouTube、TikTok、Instagram、X、Threads、Facebook に投稿できる [post mesh](https://post-mesh.com) のスキルです。
 
-Post to YouTube, TikTok, Instagram, X (Twitter), Threads, and Facebook from your AI agent.
-
-## Install
+## インストール
 
 ```bash
 npx skills add post-mesh-hq/agent-skills
 ```
 
-Or manually clone and symlink:
+手動でインストールする場合:
 
 ```bash
 git clone https://github.com/post-mesh-hq/agent-skills.git
 ln -s "$(pwd)/agent-skills/skills/post-mesh" ~/.claude/skills/post-mesh
 ```
 
-## Setup
+## セットアップ
 
-1. Sign up at [post-mesh.com](https://post-mesh.com)
-2. Connect your SNS accounts (Settings > Connections)
-3. Generate an API key (Settings > API Keys)
-4. In Claude Code, run:
+1. [post-mesh.com](https://post-mesh.com) でアカウントを作成
+2. SNSアカウントを連携（設定 > 連携）
+3. APIキーを発行（設定 > APIキー）
+4. Claude Code で以下を実行:
 
 ```
 /post-mesh setup --key YOUR_API_KEY
 ```
 
-## What you can do
+## できること
 
-- **Text posts** to X, Threads, Facebook
-- **Image posts** to X, Threads, Facebook
-- **Video posts** to YouTube, TikTok, Instagram, Threads
-- **Scheduled posts** to any platform
-- **Multi-platform posts** — one command, multiple platforms
+- **テキスト投稿** — X、Threads、Facebook
+- **画像投稿** — X、Threads、Facebook
+- **動画投稿** — YouTube、TikTok、Instagram、Threads
+- **予約投稿** — 全プラットフォーム対応
+- **マルチプラットフォーム同時投稿** — 1回の指示で複数のSNSに投稿
 
-## Example
+## 使い方
 
 ```
-> Post "Hello from my AI agent!" to X and Threads
+> XとThreadsに「AIエージェントから投稿しています！」と投稿して
 ```
 
-That's it. The skill handles connection lookup, content formatting, and posting.
+これだけです。スキルがアカウントの確認、投稿の作成、ステータスの確認まですべて行います。
 
-## Supported platforms
+## 対応プラットフォーム
 
-| Platform  | Text | Image | Video |
-|-----------|------|-------|-------|
-| YouTube   |      |       | o     |
-| TikTok    |      |       | o     |
-| Instagram |      |       | o     |
-| X         | o    | o     |       |
-| Threads   | o    | o     | o     |
-| Facebook  | o    | o     |       |
+| プラットフォーム | テキスト | 画像 | 動画 |
+|------------------|----------|------|------|
+| YouTube          |          |      | o    |
+| TikTok           |          |      | o    |
+| Instagram        |          |      | o    |
+| X                | o        | o    |      |
+| Threads          | o        | o    | o    |
+| Facebook         | o        | o    |      |
 
-## Requirements
+## 必要なもの
 
-- Node.js 18+
-- [Claude Code](https://claude.ai/claude-code) or any agent that supports skills
+- Node.js 18以上
+- [Claude Code](https://claude.ai/claude-code)
 
-## Links
+## リンク
 
 - [post mesh](https://post-mesh.com)
-- [API Documentation](https://post-mesh.com/api/openapi)
+- [APIドキュメント](https://post-mesh.com/api/openapi)
