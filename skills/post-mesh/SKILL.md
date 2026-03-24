@@ -1,288 +1,286 @@
 ---
 name: post-mesh
 description: >
-  Create, schedule, and manage social media posts across YouTube, TikTok, Instagram, X (Twitter),
-  Threads, and Facebook via post mesh. ALWAYS use this skill when asked to post, schedule, publish,
-  or manage social media content for any of these platforms. Also use when the user mentions
-  "post mesh", cross-posting, multi-platform posting, simultaneous posting, or wants to manage
-  SNS content from their terminal or AI agent. Covers text posts, image posts, video posts,
-  media uploads, scheduled posts, and post status tracking.
-last-updated: 2026-03-18
+  post mesh を使って YouTube、TikTok、Instagram、X (Twitter)、Threads、Facebook への
+  投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
+  「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
+  テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
+last-updated: 2026-03-24
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
-# post mesh — Multi-Platform Social Media Posting
+# post mesh — マルチプラットフォームSNS投稿
 
-post mesh lets you create, schedule, and manage posts across multiple social platforms from a single API. One post, many platforms.
+post mesh は複数のSNSプラットフォームへの投稿を一括で作成・予約・管理できるサービスです。
 
-| Platform  | Text | Image | Video |
-|-----------|------|-------|-------|
-| YouTube   |      |       | o     |
-| TikTok    |      |       | o     |
-| Instagram |      |       | o     |
-| X         | o    | o     |       |
-| Threads   | o    | o     | o     |
-| Facebook  | o    | o     |       |
+| プラットフォーム | テキスト | 画像 | 動画 |
+|------------------|----------|------|------|
+| YouTube          |          |      | o    |
+| TikTok           |          |      | o    |
+| Instagram        |          |      | o    |
+| X                | o        | o    |      |
+| Threads          | o        | o    | o    |
+| Facebook         | o        | o    |      |
 
-## Keeping This Skill Updated
+## スキルの更新確認
 
-Check `last-updated` above. If more than 30 days old, suggest updating:
+上記の `last-updated` を確認し、30日以上前であれば更新を提案する:
 
 ```bash
 npx skills check
 npx skills update
 ```
 
-## Setup
+## セットアップ
 
-You need a post mesh API key before using any commands.
+コマンドを使用する前に post mesh の APIキーが必要です。
 
-1. Sign up at [post-mesh.com](https://post-mesh.com)
-2. Connect your SNS accounts in the dashboard (Settings > Connections)
-3. Generate an API key from Settings > API Keys
-4. Run setup:
+1. [post-mesh.com](https://post-mesh.com) でアカウントを作成
+2. ダッシュボードでSNSアカウントを連携（設定 > 連携）
+3. 設定 > APIキー からAPIキーを発行
+4. セットアップを実行:
 
 ```bash
 node ./scripts/post-mesh.js setup --key YOUR_API_KEY --global
 ```
 
-Use `--global` to save to `~/.config/post-mesh/config.json` (recommended). Without it, the key saves to `.post-mesh/config.json` in the current directory.
+`--global` を指定すると `~/.config/post-mesh/config.json` に保存されます（推奨）。指定しない場合はカレントディレクトリの `.post-mesh/config.json` に保存されます。
 
-You can also set the `POST_MESH_API_KEY` environment variable instead.
+環境変数 `POST_MESH_API_KEY` でも設定できます。
 
-**If no API key is found**, do not search for it or guess. Tell the user to run the setup command with their key and wait.
+**APIキーが見つからない場合**、勝手に探したり推測してはいけません。ユーザーにセットアップコマンドの実行を案内して待ってください。
 
-### Config Priority
+### 設定の優先順位
 
-1. `POST_MESH_API_KEY` environment variable
-2. Local project config (`.post-mesh/config.json`)
-3. Global config (`~/.config/post-mesh/config.json`)
+1. 環境変数 `POST_MESH_API_KEY`
+2. ローカル設定（`.post-mesh/config.json`）
+3. グローバル設定（`~/.config/post-mesh/config.json`）
 
-### Verify Setup
+### セットアップの確認
 
 ```bash
 node ./scripts/post-mesh.js config show
 node ./scripts/post-mesh.js account
 ```
 
-## CLI Commands
+## CLIコマンド
 
-All commands output JSON.
+すべてのコマンドはJSONを出力します。
 
-### Configuration
+### 設定
 
-| Command | Description |
-|---------|-------------|
-| `setup --key <KEY> [--global]` | Save API key |
-| `config show` | Show current config (key is masked) |
-| `account` | Get account info (user ID and email) |
+| コマンド | 説明 |
+|----------|------|
+| `setup --key <KEY> [--global]` | APIキーを保存 |
+| `config show` | 現在の設定を表示（キーはマスクされる） |
+| `account` | アカウント情報を取得（ユーザーIDとメールアドレス） |
 
-### Connections (SNS Accounts)
+### 連携アカウント
 
-| Command | Description |
-|---------|-------------|
-| `connections [--platform <p>]` | List connected SNS accounts |
+| コマンド | 説明 |
+|----------|------|
+| `connections [--platform <p>]` | 連携済みSNSアカウントを一覧表示 |
 
-Platform values: `youtube`, `tiktok`, `instagram`, `threads`, `x`, `facebook`
+プラットフォーム値: `youtube`, `tiktok`, `instagram`, `threads`, `x`, `facebook`
 
-### Media
+### メディア
 
-| Command | Description |
-|---------|-------------|
-| `media upload <file-path>` | Upload a media file, returns `media_id` |
+| コマンド | 説明 |
+|----------|------|
+| `media upload <file-path>` | メディアファイルをアップロードし `media_id` を返す |
 
-Supported files:
-- **Video**: `.mp4`, `.mov` (max 500 MB)
-- **Image**: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif` (max 20 MB)
+対応ファイル:
+- **動画**: `.mp4`, `.mov`（最大500MB）
+- **画像**: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`（最大20MB）
 
-The signed upload URL expires in 15 minutes.
+署名付きアップロードURLの有効期限は15分です。
 
-### Posts
+### 投稿
 
-| Command | Description |
-|---------|-------------|
-| `posts create --data '<JSON>'` | Create a post (immediate or scheduled) |
-| `posts list [--status <s>] [--platform <p>] [--page N] [--limit N]` | List posts |
-| `posts get <id>` | Get post details and per-platform status |
-| `posts cancel <id>` | Cancel a scheduled post |
+| コマンド | 説明 |
+|----------|------|
+| `posts create --data '<JSON>'` | 投稿を作成（即時または予約） |
+| `posts list [--status <s>] [--platform <p>] [--page N] [--limit N]` | 投稿を一覧表示 |
+| `posts get <id>` | 投稿の詳細とプラットフォームごとのステータスを取得 |
+| `posts cancel <id>` | 予約投稿をキャンセル |
 
-Status values: `posted`, `scheduled`, `processing`, `failed`
+ステータス値: `posted`, `scheduled`, `processing`, `failed`
 
-## Creating Posts
+## 投稿の作成
 
-### Post Data Format
+### 投稿データ形式
 
 ```json
 {
   "category": "text",
-  "caption": "Your post text",
+  "caption": "投稿テキスト",
   "targets": [
     {
       "connection_id": "conn_abc",
-      "caption": "Platform-specific caption",
-      "youtube_title": "Required for YouTube only"
+      "caption": "プラットフォーム別のキャプション",
+      "youtube_title": "YouTube専用のタイトル"
     }
   ],
   "scheduled_at": "2026-04-01T10:00:00Z",
-  "media_id": "For video posts only",
-  "media_ids": ["For image posts only"],
+  "media_id": "動画投稿のみ",
+  "media_ids": ["画像投稿のみ"],
   "thumbnail_time": 5.5
 }
 ```
 
-### Fields
+### フィールド
 
-| Field | Required | Notes |
-|-------|----------|-------|
-| `category` | Always | `text`, `image`, or `video` |
-| `caption` | Always | Default caption |
-| `targets` | Always | At least one target |
-| `targets[].connection_id` | Always | From `connections` command |
-| `targets[].caption` | Always | Per-platform caption |
-| `targets[].youtube_title` | YouTube | Required when target is YouTube |
-| `scheduled_at` | No | ISO 8601 future datetime. Omit for immediate post |
-| `media_id` | `video` only | From `media upload` |
-| `media_ids` | `image` only | Array of IDs from `media upload` |
-| `thumbnail_time` | No | Thumbnail position in seconds (video only) |
+| フィールド | 必須 | 備考 |
+|------------|------|------|
+| `category` | 常に | `text`, `image`, `video` のいずれか |
+| `caption` | 常に | デフォルトのキャプション |
+| `targets` | 常に | 1つ以上のターゲット |
+| `targets[].connection_id` | 常に | `connections` コマンドで取得 |
+| `targets[].caption` | 常に | プラットフォームごとのキャプション |
+| `targets[].youtube_title` | YouTube | YouTubeの場合は必須 |
+| `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
+| `media_id` | `video` のみ | `media upload` で取得 |
+| `media_ids` | `image` のみ | `media upload` で取得したIDの配列 |
+| `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
 
-### Text Post
+### テキスト投稿
 
 ```bash
-# 1. Find your X connection
+# 1. Xの連携アカウントを確認
 node ./scripts/post-mesh.js connections --platform x
 
-# 2. Post
+# 2. 投稿
 node ./scripts/post-mesh.js posts create --data '{
   "category": "text",
-  "caption": "Hello world!",
-  "targets": [{"connection_id": "conn_abc", "caption": "Hello world!"}]
+  "caption": "こんにちは！",
+  "targets": [{"connection_id": "conn_abc", "caption": "こんにちは！"}]
 }'
 ```
 
-### Image Post
+### 画像投稿
 
 ```bash
-# 1. Upload images
+# 1. 画像をアップロード
 node ./scripts/post-mesh.js media upload ./photo1.jpg
 node ./scripts/post-mesh.js media upload ./photo2.jpg
 
-# 2. Post with media_ids
+# 2. media_ids を指定して投稿
 node ./scripts/post-mesh.js posts create --data '{
   "category": "image",
-  "caption": "Beautiful photos",
+  "caption": "写真です",
   "media_ids": ["media_abc", "media_def"],
-  "targets": [{"connection_id": "conn_x", "caption": "Beautiful photos #photography"}]
+  "targets": [{"connection_id": "conn_x", "caption": "写真です #photography"}]
 }'
 ```
 
-### Video Post
+### 動画投稿
 
 ```bash
-# 1. Upload video
+# 1. 動画をアップロード
 node ./scripts/post-mesh.js media upload ./video.mp4
 
-# 2. Post with media_id (YouTube needs youtube_title)
+# 2. media_id を指定して投稿（YouTubeは youtube_title が必須）
 node ./scripts/post-mesh.js posts create --data '{
   "category": "video",
-  "caption": "New video!",
+  "caption": "新しい動画です！",
   "media_id": "media_abc",
   "thumbnail_time": 3.0,
   "targets": [
-    {"connection_id": "conn_yt", "caption": "Check this out! #youtube", "youtube_title": "My Video"},
-    {"connection_id": "conn_tt", "caption": "Check this out! #tiktok"}
+    {"connection_id": "conn_yt", "caption": "ぜひ見てください！ #youtube", "youtube_title": "動画タイトル"},
+    {"connection_id": "conn_tt", "caption": "ぜひ見てください！ #tiktok"}
   ]
 }'
 ```
 
-### Multi-Platform Post
+### マルチプラットフォーム投稿
 
-Post to multiple platforms at once by adding targets. Each target can have its own caption:
+ターゲットを追加するだけで複数プラットフォームに同時投稿できます。各ターゲットに個別のキャプションを設定可能:
 
 ```bash
 node ./scripts/post-mesh.js posts create --data '{
   "category": "text",
-  "caption": "Big announcement!",
+  "caption": "お知らせです！",
   "targets": [
-    {"connection_id": "conn_x", "caption": "Big announcement! #X"},
-    {"connection_id": "conn_threads", "caption": "Big announcement!"},
-    {"connection_id": "conn_fb", "caption": "Big announcement! Read more at..."}
+    {"connection_id": "conn_x", "caption": "お知らせです！ #X"},
+    {"connection_id": "conn_threads", "caption": "お知らせです！"},
+    {"connection_id": "conn_fb", "caption": "お知らせです！ 詳細はこちら..."}
   ]
 }'
 ```
 
-### Scheduled Post
+### 予約投稿
 
-Add `scheduled_at` with a future ISO 8601 datetime:
+`scheduled_at` にISO 8601形式の未来の日時を指定:
 
 ```bash
 node ./scripts/post-mesh.js posts create --data '{
   "category": "text",
-  "caption": "Good morning!",
-  "targets": [{"connection_id": "conn_x", "caption": "Good morning!"}],
+  "caption": "おはようございます！",
+  "targets": [{"connection_id": "conn_x", "caption": "おはようございます！"}],
   "scheduled_at": "2026-04-01T09:00:00Z"
 }'
 ```
 
-## Checking Post Status
+## 投稿ステータスの確認
 
-After an immediate post, status starts as `processing`. Poll until it changes:
+即時投稿の場合、ステータスは最初 `processing` になります。変化するまでポーリングしてください:
 
 ```bash
 node ./scripts/post-mesh.js posts get <post-id>
 ```
 
-- Poll every 2 seconds, up to 30 seconds (60 seconds for video)
-- Done when `platforms[].status` is `posted` or `failed`
-- On success, `platforms[].external_url` has the live URL — show it to the user
-- On failure, `platforms[].error_message` explains what went wrong
+- 2秒間隔でポーリング、最大30秒（動画は60秒）
+- `platforms[].status` が `posted` または `failed` になったら完了
+- 成功時は `platforms[].external_url` にライブURLが入る — ユーザーに表示する
+- 失敗時は `platforms[].error_message` にエラー内容が入る
 
-For scheduled posts, the status is immediately `scheduled` — no polling needed.
+予約投稿の場合、ステータスは即座に `scheduled` になるためポーリング不要。
 
-## Cancelling Scheduled Posts
+## 予約投稿のキャンセル
 
-Only posts with `can_cancel: true` can be cancelled:
+`can_cancel: true` の投稿のみキャンセル可能:
 
 ```bash
 node ./scripts/post-mesh.js posts cancel <post-id>
 ```
 
-## Recommended Workflow
+## 推奨ワークフロー
 
-Always talk to the user first before making any API calls. Understand what they want to post and where before touching the API.
+APIを呼び出す前に、まずユーザーと会話してください。何を投稿したいのか、どこに投稿するのかを理解してからAPIを使います。
 
-1. **Clarify intent** — ask the user what they want to post (text / image / video), to which platforms, and whether it's immediate or scheduled
-2. **List connections** — `connections` to get all available accounts. Filter by the category the user chose and only show platforms that support it:
-   - **text**: X, Threads, Facebook
-   - **image**: X, Threads, Facebook
-   - **video**: YouTube, TikTok, Instagram, X, Threads
+1. **意図を確認** — ユーザーに何を投稿したいか（テキスト/画像/動画）、どのプラットフォームに投稿するか、即時か予約かを聞く
+2. **連携アカウントを確認** — `connections` で利用可能なアカウントを取得。ユーザーが選んだカテゴリに対応するプラットフォームのみ表示:
+   - **テキスト**: X, Threads, Facebook
+   - **画像**: X, Threads, Facebook
+   - **動画**: YouTube, TikTok, Instagram, X, Threads
 
-   Present grouped by platform:
+   プラットフォームごとにグループ化して表示:
    ```
    X: @_hid3, @post_mesh
    Threads: @_hid3
    Facebook: My Page
    ```
-   Do not show platforms that don't support the chosen category (e.g., don't show YouTube for image posts). Ask the user which account(s) to post to.
-3. **Prepare content** — draft captions with the user, respecting platform character limits. For images/videos, confirm the file path
-4. **Confirm with user** — show the final plan (content, target accounts with platform, schedule) and get explicit approval
-5. **Upload media** (if needed) — `media upload <file>` to get a `media_id`
-6. **Create post** — `posts create --data '...'`
-7. **Verify result** — `posts get <id>` to confirm success and get live URLs
+   選択したカテゴリに対応しないプラットフォームは表示しない（例: 画像投稿にYouTubeを表示しない）。ユーザーにどのアカウントに投稿するか聞く。
+3. **コンテンツを準備** — ユーザーとキャプションを作成。プラットフォームの文字数制限を考慮する。画像/動画の場合はファイルパスを確認
+4. **ユーザーに確認** — 最終プラン（コンテンツ、投稿先アカウントとプラットフォーム、スケジュール）を表示し、明示的な承認を得る
+5. **メディアをアップロード**（必要な場合） — `media upload <file>` で `media_id` を取得
+6. **投稿を作成** — `posts create --data '...'`
+7. **結果を確認** — `posts get <id>` で成功を確認しライブURLを取得
 
-## Important Rules
+## 重要なルール
 
-- **Always confirm before posting.** Unless the user explicitly says "post now" or "publish immediately", show them the content and targets first. Immediate posts are irreversible once published.
-- **Keep captions consistent.** Use the same text in `caption` and `targets[].caption` unless the user wants platform-specific text.
-- **YouTube needs a title.** Always include `youtube_title` in targets for YouTube connections.
-- **Convert timezones.** When the user says "tomorrow at 9am", convert to ISO 8601 in their timezone.
-- **No duplicate content.** Don't post the same content twice to the same account.
-- **Respect rate limits.** If you get a 429 response, back off before retrying.
-- **Subscription required.** Media upload and post creation require an active subscription. If you get a 403 `SUBSCRIPTION_REQUIRED` error, tell the user they need an active subscription at post-mesh.com.
+- **投稿前に必ず確認する。** ユーザーが「今すぐ投稿して」「すぐに公開して」と明示しない限り、コンテンツとターゲットを先に表示する。即時投稿は公開後に取り消せない。
+- **キャプションを統一する。** ユーザーがプラットフォーム別のテキストを望まない限り、`caption` と `targets[].caption` は同じテキストを使う。
+- **YouTubeにはタイトルが必須。** YouTubeの連携アカウントには必ず `youtube_title` を含める。
+- **タイムゾーンを変換する。** ユーザーが「明日の9時」と言ったら、ユーザーのタイムゾーンでISO 8601に変換する。
+- **重複投稿をしない。** 同じアカウントに同じコンテンツを2回投稿しない。
+- **レート制限を守る。** 429レスポンスを受け取ったら、リトライ前に待つ。
+- **サブスクリプションが必要。** メディアアップロードと投稿作成にはアクティブなサブスクリプションが必要。403 `SUBSCRIPTION_REQUIRED` エラーが出た場合、post-mesh.com でサブスクリプションが必要であることをユーザーに伝える。
 
-## Automation Guidelines
+## 自動化のガイドライン
 
-When used in automated workflows:
-- No duplicate or near-duplicate content across runs
-- No automated replies or engagement farming
-- Always include human review before publishing
-- Respect each platform's terms of service
+自動化ワークフローで使用する場合:
+- 実行をまたいで重複・類似コンテンツを投稿しない
+- 自動返信やエンゲージメント稼ぎをしない
+- 公開前に必ず人間のレビューを含める
+- 各プラットフォームの利用規約を遵守する
