@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Carousel Preview</title>
+<style>
+body {
+  background: #1a1a1a;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 24px;
+  justify-content: center;
+}
+.frame {
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 500px;
+  height: 500px;
+}
+.frame iframe {
+  transform: scale(0.463);
+  transform-origin: top left;
+  width: 1080px;
+  height: 1080px;
+  border: none;
+}
+.label {
+  color: #888;
+  font-family: monospace;
+  font-size: 14px;
+  text-align: center;
+  padding: 8px;
+}
+</style>
+</head>
+<body>
+<div>
+  <div class="frame"><iframe src="slide1.html"></iframe></div>
+  <div class="label">1 / 5 - 表紙</div>
+</div>
+<div>
+  <div class="frame"><iframe src="slide2.html"></iframe></div>
+  <div class="label">2 / 5 - continue</div>
+</div>
+<div>
+  <div class="frame"><iframe src="slide3.html"></iframe></div>
+  <div class="label">3 / 5 - resume</div>
+</div>
+<div>
+  <div class="frame"><iframe src="slide4.html"></iframe></div>
+  <div class="label">4 / 5 - fork-session</div>
+</div>
+<div>
+  <div class="frame"><iframe src="slide5.html"></iframe></div>
+  <div class="label">5 / 5 - まとめ</div>
+</div>
+</body>
+</html>

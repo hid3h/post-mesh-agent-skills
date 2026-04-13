@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080, height=1080">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1080px;
+  height: 1080px;
+  background: #0a0a0a;
+  color: #e8e8e8;
+  font-family: 'Noto Sans JP', sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 80px 90px;
+  overflow: hidden;
+}
+.tag {
+  display: inline-block;
+  background: #ea580c;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-bottom: 32px;
+  letter-spacing: 2px;
+}
+.title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 52px;
+  font-weight: 700;
+  color: #ea580c;
+  margin-bottom: 16px;
+}
+.desc {
+  font-size: 36px;
+  font-weight: 700;
+  color: #e8e8e8;
+  margin-bottom: 40px;
+}
+.terminal {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 44px;
+  box-shadow: 0 0 40px rgba(234, 88, 12, 0.1);
+}
+.terminal-bar {
+  background: #1a1a1a;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 10px;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #22c55e; }
+.terminal-body {
+  background: #111;
+  padding: 32px 40px;
+}
+.prompt-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  color: #666;
+  line-height: 2;
+}
+.prompt-line .cmd { color: #ea580c; }
+.prompt-line .flag { color: #22c55e; }
+.prompt-line .str { color: #facc15; }
+.prompt-line .comment { color: #555; font-size: 22px; }
+
+.points {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+}
+.point {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.point-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(234, 88, 12, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.point-text {
+  font-size: 30px;
+  line-height: 1.5;
+  color: #ccc;
+}
+.point-text strong { color: #e8e8e8; }
+
+.tip-box {
+  background: rgba(234, 88, 12, 0.08);
+  border-left: 4px solid #ea580c;
+  padding: 20px 24px;
+  border-radius: 0 12px 12px 0;
+  margin-top: 8px;
+}
+.tip-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  color: #ea580c;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.tip-text {
+  font-size: 26px;
+  color: #999;
+  line-height: 1.5;
+}
+.tip-text code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(234, 88, 12, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #ea580c;
+  font-size: 24px;
+}
+
+.slide-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  color: #444;
+  position: absolute;
+  bottom: 40px;
+  right: 50px;
+}
+</style>
+</head>
+<body>
+  <div class="tag">02 RESUME</div>
+  <div class="title">claude --resume</div>
+  <div class="desc">どのセッション？一覧から選べる</div>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt-line">$ <span class="cmd">claude</span> <span class="flag">--resume</span></div>
+      <div class="prompt-line"><span class="comment">  # 省略: claude -r</span></div>
+      <div class="prompt-line">$ <span class="cmd">claude</span> <span class="flag">--resume</span> <span class="str">"my-task"</span></div>
+    </div>
+  </div>
+  <div class="points">
+    <div class="point">
+      <div class="point-icon">🤔</div>
+      <div class="point-text">セッションが複数あって<strong>どれか分からない</strong> → <strong>一覧から選択</strong></div>
+    </div>
+    <div class="point">
+      <div class="point-icon">★</div>
+      <div class="point-text">名前指定で<strong>特定のセッション</strong>を即再開</div>
+    </div>
+    <div class="point">
+      <div class="point-icon">↔</div>
+      <div class="point-text"><strong>複数タスクの切り替え</strong>に最適</div>
+    </div>
+  </div>
+  <div class="tip-box">
+    <div class="tip-label">TIP</div>
+    <div class="tip-text"><code>claude --name "名前"</code> で事前に名前を付けておくと便利</div>
+  </div>
+  <div class="slide-count">3 / 5</div>
+</body>
+</html>

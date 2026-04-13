@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>cmux カルーセル プレビュー</title>
+<style>
+body {
+  background: #1a1a1a;
+  color: #e8e8e8;
+  font-family: sans-serif;
+  padding: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+.slide-wrapper {
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+.slide-wrapper iframe {
+  width: 1080px;
+  height: 1080px;
+  border: none;
+  transform: scale(0.463);
+  transform-origin: top left;
+}
+h2 {
+  width: 100%;
+  text-align: center;
+  margin: 0 0 20px;
+  font-size: 24px;
+  color: #ea580c;
+}
+</style>
+</head>
+<body>
+  <h2>cmux カルーセル プレビュー（5枚）</h2>
+  <div class="slide-wrapper"><iframe src="slide1.html"></iframe></div>
+  <div class="slide-wrapper"><iframe src="slide2.html"></iframe></div>
+  <div class="slide-wrapper"><iframe src="slide3.html"></iframe></div>
+  <div class="slide-wrapper"><iframe src="slide4.html"></iframe></div>
+  <div class="slide-wrapper"><iframe src="slide5.html"></iframe></div>
+</body>
+</html>
