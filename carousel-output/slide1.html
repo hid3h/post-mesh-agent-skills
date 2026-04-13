@@ -9,8 +9,8 @@
 body {
   width: 1080px;
   height: 1080px;
-  background: #0a0a0a;
-  color: #e8e8e8;
+  background: #f8f6f3;
+  color: #1a1a1a;
   font-family: 'Noto Sans JP', sans-serif;
   display: flex;
   flex-direction: column;
@@ -22,10 +22,10 @@ body {
   width: 820px;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 0 80px rgba(234, 88, 12, 0.15);
+  box-shadow: 0 0 60px rgba(217, 83, 10, 0.1);
 }
 .terminal-bar {
-  background: #1a1a1a;
+  background: #e8e5e0;
   height: 48px;
   display: flex;
   align-items: center;
@@ -39,34 +39,34 @@ body {
 .terminal-title {
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
-  color: #666;
+  color: #999;
   margin-left: 12px;
 }
 .terminal-body {
-  background: #111;
+  background: #f0ede8;
   padding: 40px 48px;
 }
 .prompt-line {
   font-family: 'JetBrains Mono', monospace;
   font-size: 24px;
-  color: #666;
+  color: #999;
   margin-bottom: 8px;
 }
 .prompt-line .cursor {
   display: inline-block;
   width: 14px;
   height: 28px;
-  background: #ea580c;
+  background: #d9530a;
   animation: blink 1s step-end infinite;
   vertical-align: middle;
   margin-left: 4px;
 }
 @keyframes blink { 50% { opacity: 0; } }
-.prompt-line .cmd { color: #ea580c; }
+.prompt-line .cmd { color: #d9530a; }
 
 .top-label {
   font-size: 24px;
-  color: #ea580c;
+  color: #d9530a;
   font-weight: 700;
   letter-spacing: 4px;
   margin-bottom: 40px;
@@ -79,18 +79,18 @@ body {
   text-align: center;
 }
 .main-title .accent {
-  color: #ea580c;
+  color: #d9530a;
 }
 .subtitle {
   font-size: 36px;
-  color: #999;
+  color: #777;
   text-align: center;
   margin-bottom: 48px;
 }
 .slide-count {
   font-family: 'JetBrains Mono', monospace;
   font-size: 20px;
-  color: #444;
+  color: #bbb;
   position: absolute;
   bottom: 40px;
   right: 50px;
