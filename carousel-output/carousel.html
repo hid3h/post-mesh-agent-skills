@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  width: 1080px;
+  overflow-y: auto;
+  background: #ccc;
+  font-family: 'Noto Sans JP', sans-serif;
+  color: #1a1a1a;
+}
+
+/* === 共通: スライドコンテナ === */
+.slide {
+  width: 1080px;
+  height: 1080px;
+  position: relative;
+  background: #f8f6f3;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+.slide-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  color: #bbb;
+  position: absolute;
+  bottom: 40px;
+  right: 50px;
+}
+
+/* === スライド1: フック === */
+#slide-1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#slide-1 .top-label {
+  font-size: 24px;
+  color: #d9530a;
+  font-weight: 700;
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+}
+#slide-1 .main-title {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1.3;
+  margin-bottom: 24px;
+  text-align: center;
+}
+#slide-1 .main-title .accent { color: #d9530a; }
+#slide-1 .subtitle {
+  font-size: 36px;
+  color: #777;
+  text-align: center;
+  margin-bottom: 48px;
+}
+#slide-1 .terminal {
+  width: 820px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(217, 83, 10, 0.1);
+}
+#slide-1 .terminal-bar {
+  background: #e8e5e0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 10px;
+}
+.dot { width: 14px; height: 14px; border-radius: 50%; }
+.dot-red { background: #ef4444; }
+.dot-yellow { background: #eab308; }
+.dot-green { background: #22c55e; }
+#slide-1 .terminal-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #999;
+  margin-left: 12px;
+}
+#slide-1 .terminal-body {
+  background: #f0ede8;
+  padding: 40px 48px;
+}
+.prompt-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  color: #999;
+  margin-bottom: 8px;
+}
+.prompt-line .cmd { color: #d9530a; }
+.prompt-line .cursor {
+  display: inline-block;
+  width: 14px;
+  height: 28px;
+  background: #d9530a;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* === スライド2 & 3: 解説スライド共通 === */
+.slide-detail {
+  display: flex;
+  flex-direction: column;
+  padding: 80px 90px;
+}
+.slide-detail .tag {
+  display: inline-block;
+  background: #d9530a;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-bottom: 28px;
+  letter-spacing: 2px;
+  width: fit-content;
+}
+.slide-detail .title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 52px;
+  font-weight: 700;
+  color: #d9530a;
+  margin-bottom: 12px;
+}
+.slide-detail .title-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  color: #999;
+  margin-bottom: 32px;
+}
+.slide-detail .problem {
+  font-size: 34px;
+  color: #777;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.slide-detail .problem .emoji { margin-right: 8px; }
+.slide-detail .solution {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 36px;
+  line-height: 1.5;
+}
+.slide-detail .solution .accent { color: #d9530a; }
+.slide-detail .screenshot-area {
+  width: 820px;
+  height: 300px;
+  background: #f0ede8;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.slide-detail .screenshot-placeholder {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  color: #ccc;
+  letter-spacing: 4px;
+}
+.slide-detail .points {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.slide-detail .point {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.slide-detail .point-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(217, 83, 10, 0.12);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.slide-detail .point-text {
+  font-size: 30px;
+  line-height: 1.5;
+  color: #555;
+}
+.slide-detail .point-text strong { color: #1a1a1a; }
+
+/* スライド2固有 */
+#slide-2 .screenshot-area { margin-bottom: 36px; }
+#slide-2 .points {
+  flex: 1;
+  justify-content: center;
+}
+
+/* スライド3固有 */
+#slide-3 .screenshot-area { margin-bottom: 32px; }
+#slide-3 .points { margin-bottom: 24px; }
+.tip-box {
+  background: rgba(217, 83, 10, 0.06);
+  border-left: 4px solid #d9530a;
+  padding: 20px 24px;
+  border-radius: 0 12px 12px 0;
+}
+.tip-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  color: #d9530a;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.tip-text {
+  font-size: 26px;
+  color: #777;
+  line-height: 1.5;
+}
+.tip-text code {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(217, 83, 10, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #d9530a;
+  font-size: 24px;
+}
+
+/* === スライド4: まとめ === */
+#slide-4 {
+  display: flex;
+  flex-direction: column;
+  padding: 80px 90px;
+}
+#slide-4 .tag {
+  display: inline-block;
+  background: #d9530a;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+  width: fit-content;
+}
+#slide-4 .title {
+  font-size: 52px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin-bottom: 48px;
+}
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 56px;
+}
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f0ede8;
+  border: 1px solid #e0e0e0;
+  border-radius: 14px;
+  padding: 24px 28px;
+}
+.feature-desc {
+  font-size: 26px;
+  color: #777;
+  line-height: 1.4;
+  flex: 1;
+}
+.feature-arrow {
+  color: #d9530a;
+  font-size: 28px;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.feature-cmd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  color: #d9530a;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 300px;
+  text-align: right;
+}
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #ddd, transparent);
+  margin-bottom: 48px;
+}
+.cta-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.cta-text {
+  font-size: 40px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+.cta-sub {
+  font-size: 26px;
+  color: #777;
+}
+.cta-sub code {
+  font-family: 'JetBrains Mono', monospace;
+  color: #d9530a;
+  background: rgba(217, 83, 10, 0.08);
+  padding: 2px 10px;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== スライド1: フック ===== -->
+<div id="slide-1" class="slide">
+  <div class="top-label">CLAUDE CODE TIPS</div>
+  <div class="main-title">
+    セッション閉じちゃった...<br>
+    <span class="accent">あの作業どこいった？</span>
+  </div>
+  <div class="subtitle">Claude Codeなら2つのコマンドで解決</div>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <div class="terminal-title">~ — zsh</div>
+    </div>
+    <div class="terminal-body">
+      <div class="prompt-line">$ <span class="cmd">claude --continue</span></div>
+      <div class="prompt-line">$ <span class="cmd">claude --resume "my-task"</span><span class="cursor"></span></div>
+    </div>
+  </div>
+  <div class="slide-count">1 / 4</div>
+</div>
+
+<!-- ===== スライド2: --continue ===== -->
+<div id="slide-2" class="slide slide-detail">
+  <div class="tag">01 CONTINUE</div>
+  <div class="title">claude --continue</div>
+  <div class="title-sub">（省略: -c）</div>
+  <div class="problem"><span class="emoji">😱</span>うっかりセッションを閉じてしまった / 翌日に続きをやりたい</div>
+  <div class="solution"><span class="accent">→</span> --continueで直前のセッションをすぐ再開</div>
+  <div class="screenshot-area">
+    <img src="" alt="SCREENSHOT" style="display:none; width:100%; height:100%; object-fit:cover;">
+    <div class="screenshot-placeholder">SCREENSHOT</div>
+  </div>
+  <div class="points">
+    <div class="point">
+      <div class="point-icon">✓</div>
+      <div class="point-text">IDを覚える必要なし、<strong>直前のセッション</strong>を自動選択</div>
+    </div>
+    <div class="point">
+      <div class="point-icon">⚡</div>
+      <div class="point-text">会話の<strong>コンテキストがそのまま</strong>復元される</div>
+    </div>
+  </div>
+  <div class="slide-count">2 / 4</div>
+</div>
+
+<!-- ===== スライド3: --resume ===== -->
+<div id="slide-3" class="slide slide-detail">
+  <div class="tag">02 RESUME</div>
+  <div class="title">claude --resume</div>
+  <div class="title-sub">（省略: -r）</div>
+  <div class="problem"><span class="emoji">🤔</span>複数セッションがあってどれを再開すればいいかわからない</div>
+  <div class="solution"><span class="accent">→</span> --resumeでセッション一覧から選択して再開</div>
+  <div class="screenshot-area">
+    <img src="" alt="SCREENSHOT" style="display:none; width:100%; height:100%; object-fit:cover;">
+    <div class="screenshot-placeholder">SCREENSHOT</div>
+  </div>
+  <div class="points">
+    <div class="point">
+      <div class="point-icon">★</div>
+      <div class="point-text">名前指定で<strong>特定のセッション</strong>を即再開</div>
+    </div>
+    <div class="point">
+      <div class="point-icon">↔</div>
+      <div class="point-text"><strong>複数タスクの切り替え</strong>に最適</div>
+    </div>
+  </div>
+  <div class="tip-box">
+    <div class="tip-label">TIP</div>
+    <div class="tip-text"><code>/rename</code>で名前をつけておくと<code>claude --resume "名前"</code>で即再開できる</div>
+  </div>
+  <div class="slide-count">3 / 4</div>
+</div>
+
+<!-- ===== スライド4: まとめ ===== -->
+<div id="slide-4" class="slide">
+  <div class="tag">SUMMARY</div>
+  <div class="title">今日のまとめ</div>
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-desc">セッション閉じちゃった</div>
+      <div class="feature-arrow">→</div>
+      <div class="feature-cmd">claude --continue</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-desc">どのセッション再開する？</div>
+      <div class="feature-arrow">→</div>
+      <div class="feature-cmd">claude --resume</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="cta-area">
+    <div class="cta-text">セッション管理を覚えると作業効率が段違い</div>
+    <div class="cta-sub"><code>claude --continue</code> から始めよう</div>
+  </div>
+  <div class="slide-count">4 / 4</div>
+</div>
+
+</body>
+</html>
