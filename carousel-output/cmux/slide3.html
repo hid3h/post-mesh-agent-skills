@@ -32,69 +32,87 @@ body {
   margin-bottom: 36px;
 }
 .title {
-  font-family: 'JetBrains Mono', monospace;
   font-size: 52px;
-  font-weight: 700;
+  font-weight: 900;
   margin-bottom: 12px;
 }
 .description {
   font-size: 36px;
   font-weight: 700;
-  margin-bottom: 44px;
+  margin-bottom: 48px;
 }
-.terminal {
-  background: #1e293b;
+.notification-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 52px;
+}
+.notification-card {
+  background: #fff;
   border-radius: 16px;
+  padding: 28px 36px;
   width: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  margin-bottom: 44px;
-}
-.terminal-bar {
-  background: #334155;
-  height: 36px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
-  padding: 0 14px;
-  gap: 7px;
+  gap: 20px;
 }
-.terminal-dot {
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
+.notification-icon {
+  width: 56px;
+  height: 56px;
+  background: #2563eb;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
 }
-.terminal-dot.red { background: #ef4444; }
-.terminal-dot.yellow { background: #eab308; }
-.terminal-dot.green { background: #22c55e; }
-.terminal-body {
-  padding: 24px 28px;
+.notification-content {
+  flex: 1;
+}
+.notification-app {
   font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+.notification-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+.notification-body {
   font-size: 22px;
-  line-height: 2;
+  color: #64748b;
 }
-.terminal-line {
+.notification-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
   color: #94a3b8;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 4px;
 }
-.terminal-line .prompt { color: #4ade80; }
-.terminal-line .cmd { color: #60a5fa; }
-.terminal-line .flag { color: #4ade80; }
-.terminal-line .str { color: #fbbf24; }
-.terminal-line .comment { color: #64748b; }
-.notify-badge {
+.badge-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+.badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(37, 99, 235, 0.15);
-  border: 1px solid rgba(37, 99, 235, 0.3);
+  gap: 8px;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.25);
   border-radius: 10px;
-  padding: 14px 24px;
-  margin-top: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 20px;
-  color: #60a5fa;
-}
-.notify-icon {
-  font-size: 24px;
+  padding: 12px 24px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2563eb;
 }
 .points {
   display: flex;
@@ -115,6 +133,9 @@ body {
   width: 40px;
   text-align: center;
 }
+.point strong {
+  font-weight: 700;
+}
 .slide-counter {
   position: absolute;
   bottom: 40px;
@@ -127,29 +148,27 @@ body {
 </head>
 <body>
 <div class="tag">02 NOTIFY</div>
-<div class="title">cmux notify</div>
+<div class="title">自動通知</div>
 <div class="description">席を離れていても完了がわかる</div>
-<div class="terminal">
-  <div class="terminal-bar">
-    <div class="terminal-dot red"></div>
-    <div class="terminal-dot yellow"></div>
-    <div class="terminal-dot green"></div>
-  </div>
-  <div class="terminal-body">
-    <div class="terminal-line"><span class="prompt">$</span> <span class="cmd">cmux notify</span> <span class="flag">--on</span> <span class="str">complete</span></div>
-    <div class="terminal-line"><span class="comment"># タスクが終わったら通知</span></div>
-    <div class="terminal-line" style="margin-top: 4px;"><span class="prompt">$</span> <span class="cmd">cmux notify</span> <span class="flag">--sound</span></div>
-    <div class="terminal-line"><span class="comment"># サウンドで知らせる</span></div>
-    <div class="notify-badge">
-      <span class="notify-icon">&#x1F514;</span>
-      <span>Task completed in Pane 1</span>
+<div class="notification-area">
+  <div class="notification-card">
+    <div class="notification-icon">&#x1F514;</div>
+    <div class="notification-content">
+      <div class="notification-app">cmux</div>
+      <div class="notification-title">Pane 1: タスク完了</div>
+      <div class="notification-body">すべての変更が正常にコミットされました</div>
     </div>
+    <div class="notification-time">now</div>
+  </div>
+  <div class="badge-row">
+    <div class="badge">&#x2705; 設定不要</div>
+    <div class="badge">&#x1F50A; サウンド通知</div>
   </div>
 </div>
 <div class="points">
-  <div class="point"><span class="point-icon">&#x1F514;</span>作業が終わったら通知が届く</div>
+  <div class="point"><span class="point-icon">&#x1F514;</span><strong>デフォルトで通知ON</strong> — 設定不要</div>
   <div class="point"><span class="point-icon">&#x2615;</span>席を離れていても完了がわかる</div>
-  <div class="point"><span class="point-icon">&#x26A1;</span>「終わった？」の確認作業がゼロに</div>
+  <div class="point"><span class="point-icon">&#x26A1;</span>複数ペインの進捗も見逃さない</div>
 </div>
 <div class="slide-counter">3 / 5</div>
 </body>
