@@ -40,64 +40,143 @@ body {
 .description {
   font-size: 36px;
   font-weight: 700;
-  margin-bottom: 44px;
+  margin-bottom: 36px;
 }
+
+/* Terminal共通 */
 .terminal {
-  background: #1e293b;
-  border-radius: 16px;
+  border-radius: 14px;
   width: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  margin-bottom: 44px;
 }
 .terminal-bar {
-  background: #334155;
-  height: 36px;
+  height: 32px;
   display: flex;
   align-items: center;
-  padding: 0 14px;
+  padding: 0 12px;
   gap: 7px;
 }
 .terminal-dot {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
-.terminal-dot.red { background: #ef4444; }
-.terminal-dot.yellow { background: #eab308; }
-.terminal-dot.green { background: #22c55e; }
+.terminal-bar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  margin-left: auto;
+}
 .terminal-body {
-  padding: 20px 24px;
   display: flex;
-  gap: 12px;
+  align-items: center;
 }
 .pane {
   flex: 1;
-  border: 2px solid #334155;
-  border-radius: 8px;
-  padding: 16px;
+  border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 18px;
-  line-height: 1.8;
-  color: #94a3b8;
   position: relative;
-}
-.pane.active {
-  border-color: #2563eb;
-  box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
 }
 .pane-label {
   position: absolute;
-  top: -10px;
-  left: 12px;
-  font-size: 12px;
+  top: -9px;
+  left: 10px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+/* ── 上段: Terminal.app（グレー・inactive） ── */
+.terminal-before {
+  background: #2a2f38;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 14px;
+  opacity: 0.85;
+}
+.terminal-before .terminal-bar {
+  background: #404550;
+  height: 28px;
+}
+.terminal-before .terminal-dot { width: 9px; height: 9px; }
+.terminal-before .terminal-dot.red { background: #9a6565; }
+.terminal-before .terminal-dot.yellow { background: #9a9265; }
+.terminal-before .terminal-dot.green { background: #659a6e; }
+.terminal-before .terminal-bar-label {
+  color: #808590;
+}
+.terminal-before .terminal-body {
+  padding: 14px 16px;
+  gap: 10px;
+}
+.terminal-before .pane {
+  border: 1.5px solid #4a4f58;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #707580;
+}
+.terminal-before .pane-label {
+  background: #4a4f58;
+  color: #808590;
+}
+.sync-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+.sync-icon {
+  font-size: 20px;
+  filter: grayscale(0.5);
+}
+.sync-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #707580;
+  letter-spacing: 0.5px;
+}
+.before-caption {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* ── 下段: cmux（青アクセント・active） ── */
+.terminal-after {
+  background: #1e293b;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.10), 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 36px;
+}
+.terminal-after .terminal-bar {
   background: #334155;
+  height: 34px;
+}
+.terminal-after .terminal-dot.red { background: #ef4444; }
+.terminal-after .terminal-dot.yellow { background: #eab308; }
+.terminal-after .terminal-dot.green { background: #22c55e; }
+.terminal-after .terminal-bar-label {
+  color: #60a5fa;
+}
+.terminal-after .terminal-body {
+  padding: 18px 20px;
+  gap: 10px;
+}
+.terminal-after .pane {
+  border: 2px solid #2563eb;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+  padding: 14px;
+  font-size: 16px;
+  line-height: 1.8;
   color: #94a3b8;
 }
-.pane.active .pane-label {
+.terminal-after .pane-label {
   background: #2563eb;
   color: #fff;
 }
@@ -105,24 +184,56 @@ body {
 .pane .str { color: #fbbf24; }
 .pane .flag { color: #4ade80; }
 .pane .prompt { color: #4ade80; }
+.api-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+.api-icon {
+  font-size: 18px;
+  color: #60a5fa;
+}
+.api-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #60a5fa;
+  letter-spacing: 0.5px;
+}
+
+/* ── ポイント ── */
 .points {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 .point {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 400;
   line-height: 1.4;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 .point-icon {
-  font-size: 28px;
+  font-size: 26px;
   flex-shrink: 0;
-  width: 40px;
+  width: 36px;
   text-align: center;
+}
+.point code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  background: rgba(37, 99, 235, 0.08);
+  padding: 1px 8px;
+  border-radius: 4px;
+  color: #2563eb;
+}
+.point strong {
+  font-weight: 700;
 }
 .slide-counter {
   position: absolute;
@@ -136,19 +247,54 @@ body {
 </head>
 <body>
 <div class="tag">01 PANE</div>
-<div class="title">Cmd+D</div>
-<div class="description">ペインを追加して並列で動かす</div>
-<div class="terminal">
+<div class="title">Cmd+Dが変わる</div>
+<div class="description">同じCmd+D、でも中身が全然違う</div>
+
+<!-- 上段: Terminal.app（グレー・制限あり） -->
+<div class="terminal terminal-before">
   <div class="terminal-bar">
     <div class="terminal-dot red"></div>
     <div class="terminal-dot yellow"></div>
     <div class="terminal-dot green"></div>
+    <span class="terminal-bar-label">Terminal.app</span>
   </div>
   <div class="terminal-body">
-    <div class="pane active">
+    <div class="pane">
+      <div class="pane-label">PANE 1</div>
+      <div><span style="color:#707580;">$</span> <span style="color:#808590;">claude</span></div>
+      <div><span style="color:#707580;">Fixing auth...</span></div>
+    </div>
+    <div class="sync-indicator">
+      <span class="sync-icon">🔗</span>
+      <span class="sync-text">SYNC</span>
+    </div>
+    <div class="pane">
+      <div class="pane-label">PANE 2</div>
+      <div><span style="color:#707580;">$</span> <span style="color:#808590;">claude</span></div>
+      <div><span style="color:#707580;">Fixing auth...</span></div>
+    </div>
+  </div>
+</div>
+<div class="before-caption">操作が同期 — 独立して動かせない</div>
+
+<!-- 下段: cmux（青アクセント・独立） -->
+<div style="margin-top: 18px;">
+<div class="terminal terminal-after">
+  <div class="terminal-bar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+    <span class="terminal-bar-label">cmux</span>
+  </div>
+  <div class="terminal-body">
+    <div class="pane">
       <div class="pane-label">PANE 1</div>
       <div><span class="prompt">$</span> <span class="cmd">claude</span></div>
-      <div><span class="str">Fixing auth bug...</span></div>
+      <div><span class="str">Fixing auth...</span></div>
+    </div>
+    <div class="api-indicator">
+      <span class="api-icon">&#x21C4;</span>
+      <span class="api-text">API</span>
     </div>
     <div class="pane">
       <div class="pane-label">PANE 2</div>
@@ -157,11 +303,15 @@ body {
     </div>
   </div>
 </div>
-<div class="points">
-  <div class="point"><span class="point-icon">&#x21C4;</span>複数のClaude Codeを並列で稼働</div>
-  <div class="point"><span class="point-icon">&#x1F441;</span>他のペインの内容を読み取れる</div>
-  <div class="point"><span class="point-icon">&#x1F4E4;</span>他のペインに指示を送れる</div>
 </div>
+
+<!-- ポイント3つ -->
+<div class="points">
+  <div class="point"><span class="point-icon">&#x26A1;</span>各ペインが<strong>完全に独立</strong> — 別々のClaude Codeを同時実行</div>
+  <div class="point"><span class="point-icon">&#x1F441;</span><code>read-screen</code>で他ペインの出力を取得</div>
+  <div class="point"><span class="point-icon">&#x1F4E4;</span><code>send</code>で他ペインに指示を送信</div>
+</div>
+
 <div class="slide-counter">2 / 5</div>
 </body>
 </html>
