@@ -9,143 +9,128 @@
 body {
   width: 1080px;
   height: 1080px;
-  background: #0a0a0a;
-  color: #e8e8e8;
+  background: #f8f6f3;
+  color: #1a1a1a;
   font-family: 'Noto Sans JP', sans-serif;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   padding: 80px 90px;
-  overflow: hidden;
+  position: relative;
 }
 .tag {
   display: inline-block;
-  background: #ea580c;
-  color: #fff;
   font-family: 'JetBrains Mono', monospace;
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  background: #2563eb;
   padding: 8px 20px;
   border-radius: 8px;
-  margin-bottom: 32px;
-  letter-spacing: 2px;
-  align-self: flex-start;
+  margin-bottom: 36px;
 }
 .title {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 44px;
+  font-size: 52px;
   font-weight: 700;
-  color: #ea580c;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
-.desc {
+.description {
   font-size: 36px;
   font-weight: 700;
-  color: #e8e8e8;
-  margin-bottom: 48px;
+  margin-bottom: 44px;
 }
-.terminal {
-  width: 100%;
+.ring-container {
+  background: #1e293b;
   border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 48px;
-  box-shadow: 0 0 40px rgba(234, 88, 12, 0.1);
-}
-.terminal-bar {
-  background: #1a1a1a;
-  height: 44px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding: 0 20px;
-  gap: 10px;
+  padding: 50px 0;
+  margin-bottom: 44px;
+  position: relative;
+  overflow: hidden;
 }
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.dot-red { background: #ef4444; }
-.dot-yellow { background: #eab308; }
-.dot-green { background: #22c55e; }
-.terminal-body {
-  background: #111;
-  padding: 32px 40px;
+.ring {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 6px solid #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.4), 0 0 80px rgba(37, 99, 235, 0.15);
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
 }
-.prompt-line {
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.4), 0 0 80px rgba(37, 99, 235, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(37, 99, 235, 0.6), 0 0 120px rgba(37, 99, 235, 0.25);
+  }
+}
+.ring-check {
+  font-size: 48px;
+  color: #2563eb;
+  margin-bottom: 4px;
+}
+.ring-text {
   font-family: 'JetBrains Mono', monospace;
   font-size: 24px;
-  color: #666;
-  line-height: 2;
+  font-weight: 700;
+  color: #60a5fa;
 }
-.prompt-line .cmd { color: #ea580c; }
-.prompt-line .flag { color: #22c55e; }
-.prompt-line .str { color: #facc15; }
-
 .points {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 28px;
-}
-.point {
-  display: flex;
-  align-items: flex-start;
   gap: 20px;
 }
-.point-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(234, 88, 12, 0.15);
-  border-radius: 10px;
+.point {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.4;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 22px;
+  gap: 16px;
+}
+.point-icon {
+  font-size: 28px;
   flex-shrink: 0;
-  margin-top: 2px;
+  width: 40px;
+  text-align: center;
 }
-.point-text {
-  font-size: 30px;
-  line-height: 1.5;
-  color: #ccc;
-}
-.point-text strong { color: #e8e8e8; }
-.slide-count {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 20px;
-  color: #444;
+.slide-counter {
   position: absolute;
   bottom: 40px;
-  right: 50px;
+  right: 60px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  color: #bbb;
 }
 </style>
 </head>
 <body>
-  <div class="tag">03 SIDEBAR</div>
-  <div class="title">set-status / set-progress</div>
-  <div class="desc">「今どこまで？」が一目でわかる</div>
-  <div class="terminal">
-    <div class="terminal-bar">
-      <div class="dot dot-red"></div>
-      <div class="dot dot-yellow"></div>
-      <div class="dot dot-green"></div>
-    </div>
-    <div class="terminal-body">
-      <div class="prompt-line">$ <span class="cmd">cmux set-status</span> <span class="str">"task"</span> <span class="str">"auth実装"</span> <span class="flag">--icon</span> <span class="str">"⚡"</span></div>
-      <div class="prompt-line">$ <span class="cmd">cmux set-progress</span> 0.7 <span class="flag">--label</span> <span class="str">"70%完了"</span></div>
-      <div class="prompt-line">$ <span class="cmd">cmux log</span> <span class="str">"認証モジュール完成"</span></div>
-    </div>
+<div class="tag">03 RING</div>
+<div class="title">Blue Ring</div>
+<div class="description">ペインが光って完了を知らせる</div>
+<div class="ring-container">
+  <div class="ring">
+    <div class="ring-check">&#x2713;</div>
+    <div class="ring-text">Done</div>
   </div>
-  <div class="points">
-    <div class="point">
-      <div class="point-icon">▰</div>
-      <div class="point-text">進捗が見えるから<strong>安心して任せられる</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">⚑</div>
-      <div class="point-text">各タスクの状態が<strong>ひと目で区別できる</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">✎</div>
-      <div class="point-text">何をいつ完了したか<strong>履歴が自動で残る</strong></div>
-    </div>
-  </div>
-  <div class="slide-count">4 / 5</div>
+</div>
+<div class="points">
+  <div class="point"><span class="point-icon">&#x1F4A1;</span>デフォルトで設定済みのインジケーター</div>
+  <div class="point"><span class="point-icon">&#x1F535;</span>ペインが青く光って完了をお知らせ</div>
+  <div class="point"><span class="point-icon">&#x1F440;</span>複数ペインでもどれが終わったか一目瞭然</div>
+</div>
+<div class="slide-counter">4 / 5</div>
 </body>
 </html>

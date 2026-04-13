@@ -9,146 +9,159 @@
 body {
   width: 1080px;
   height: 1080px;
-  background: #0a0a0a;
-  color: #e8e8e8;
+  background: #f8f6f3;
+  color: #1a1a1a;
   font-family: 'Noto Sans JP', sans-serif;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   padding: 80px 90px;
-  overflow: hidden;
+  position: relative;
 }
 .tag {
   display: inline-block;
-  background: #ea580c;
-  color: #fff;
   font-family: 'JetBrains Mono', monospace;
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  background: #2563eb;
   padding: 8px 20px;
   border-radius: 8px;
-  margin-bottom: 32px;
-  letter-spacing: 2px;
-  align-self: flex-start;
+  margin-bottom: 36px;
 }
 .title {
   font-family: 'JetBrains Mono', monospace;
   font-size: 52px;
   font-weight: 700;
-  color: #ea580c;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
-.desc {
+.description {
   font-size: 36px;
   font-weight: 700;
-  color: #e8e8e8;
-  margin-bottom: 48px;
+  margin-bottom: 44px;
 }
 .terminal {
-  width: 100%;
+  background: #1e293b;
   border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  margin-bottom: 48px;
-  box-shadow: 0 0 40px rgba(234, 88, 12, 0.1);
+  margin-bottom: 44px;
 }
 .terminal-bar {
-  background: #1a1a1a;
-  height: 44px;
+  background: #334155;
+  height: 36px;
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  gap: 10px;
+  padding: 0 14px;
+  gap: 7px;
 }
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.dot-red { background: #ef4444; }
-.dot-yellow { background: #eab308; }
-.dot-green { background: #22c55e; }
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.terminal-dot.red { background: #ef4444; }
+.terminal-dot.yellow { background: #eab308; }
+.terminal-dot.green { background: #22c55e; }
 .terminal-body {
-  background: #111;
-  padding: 36px 40px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 12px;
 }
-.prompt-line {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 28px;
-  color: #666;
-  line-height: 1.8;
-}
-.prompt-line .cmd { color: #ea580c; }
-.prompt-line .flag { color: #22c55e; }
-.prompt-line .str { color: #facc15; }
-.prompt-line .continuation {
-  color: #666;
-  padding-left: 2em;
-}
-
-.points {
+.pane {
   flex: 1;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #94a3b8;
+  position: relative;
+}
+.pane.active {
+  border-color: #2563eb;
+  box-shadow: 0 0 12px rgba(37, 99, 235, 0.25);
+}
+.pane-label {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #334155;
+  color: #94a3b8;
+}
+.pane.active .pane-label {
+  background: #2563eb;
+  color: #fff;
+}
+.pane .cmd { color: #60a5fa; }
+.pane .str { color: #fbbf24; }
+.pane .flag { color: #4ade80; }
+.pane .prompt { color: #4ade80; }
+.points {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 28px;
-}
-.point {
-  display: flex;
-  align-items: flex-start;
   gap: 20px;
 }
-.point-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(234, 88, 12, 0.15);
-  border-radius: 10px;
+.point {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.4;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 22px;
+  gap: 16px;
+}
+.point-icon {
+  font-size: 28px;
   flex-shrink: 0;
-  margin-top: 2px;
+  width: 40px;
+  text-align: center;
 }
-.point-text {
-  font-size: 30px;
-  line-height: 1.5;
-  color: #ccc;
-}
-.point-text strong { color: #e8e8e8; }
-.slide-count {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 20px;
-  color: #444;
+.slide-counter {
   position: absolute;
   bottom: 40px;
-  right: 50px;
+  right: 60px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  color: #bbb;
 }
 </style>
 </head>
 <body>
-  <div class="tag">01 NOTIFY</div>
-  <div class="title">cmux notify</div>
-  <div class="desc">もう画面に張り付かなくていい</div>
-  <div class="terminal">
-    <div class="terminal-bar">
-      <div class="dot dot-red"></div>
-      <div class="dot dot-yellow"></div>
-      <div class="dot dot-green"></div>
+<div class="tag">01 PANE</div>
+<div class="title">Cmd+D</div>
+<div class="description">ペインを追加して並列で動かす</div>
+<div class="terminal">
+  <div class="terminal-bar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+  </div>
+  <div class="terminal-body">
+    <div class="pane active">
+      <div class="pane-label">PANE 1</div>
+      <div><span class="prompt">$</span> <span class="cmd">claude</span></div>
+      <div><span class="str">Fixing auth bug...</span></div>
     </div>
-    <div class="terminal-body">
-      <div class="prompt-line">$ <span class="cmd">cmux notify</span> <span class="flag">--title</span> <span class="str">"Build完了"</span> \</div>
-      <div class="prompt-line"><span class="continuation"><span class="flag">--body</span> <span class="str">"テスト全パス"</span></span></div>
+    <div class="pane">
+      <div class="pane-label">PANE 2</div>
+      <div><span class="prompt">$</span> <span class="cmd">claude</span></div>
+      <div><span class="str">Writing tests...</span></div>
     </div>
   </div>
-  <div class="points">
-    <div class="point">
-      <div class="point-icon">🔔</div>
-      <div class="point-text">完了を見逃さない。<strong>席を離れてOK</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">☕</div>
-      <div class="point-text">待ち時間が<strong>自由時間に変わる</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">⚡</div>
-      <div class="point-text">「終わった？」の<strong>確認作業がゼロに</strong></div>
-    </div>
-  </div>
-  <div class="slide-count">2 / 5</div>
+</div>
+<div class="points">
+  <div class="point"><span class="point-icon">&#x21C4;</span>複数のClaude Codeを並列で稼働</div>
+  <div class="point"><span class="point-icon">&#x1F441;</span>他のペインの内容を読み取れる</div>
+  <div class="point"><span class="point-icon">&#x1F4E4;</span>他のペインに指示を送れる</div>
+</div>
+<div class="slide-counter">2 / 5</div>
 </body>
 </html>

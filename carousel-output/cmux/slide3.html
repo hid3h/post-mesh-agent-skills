@@ -9,197 +9,148 @@
 body {
   width: 1080px;
   height: 1080px;
-  background: #0a0a0a;
-  color: #e8e8e8;
+  background: #f8f6f3;
+  color: #1a1a1a;
   font-family: 'Noto Sans JP', sans-serif;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   padding: 80px 90px;
-  overflow: hidden;
+  position: relative;
 }
 .tag {
   display: inline-block;
-  background: #ea580c;
-  color: #fff;
   font-family: 'JetBrains Mono', monospace;
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  background: #2563eb;
   padding: 8px 20px;
   border-radius: 8px;
-  margin-bottom: 32px;
-  letter-spacing: 2px;
-  align-self: flex-start;
+  margin-bottom: 36px;
 }
 .title {
   font-family: 'JetBrains Mono', monospace;
   font-size: 52px;
   font-weight: 700;
-  color: #ea580c;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
-.desc {
+.description {
   font-size: 36px;
   font-weight: 700;
-  color: #e8e8e8;
-  margin-bottom: 40px;
+  margin-bottom: 44px;
 }
 .terminal {
-  width: 100%;
+  background: #1e293b;
   border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  margin-bottom: 40px;
-  box-shadow: 0 0 40px rgba(234, 88, 12, 0.1);
+  margin-bottom: 44px;
 }
 .terminal-bar {
-  background: #1a1a1a;
-  height: 44px;
+  background: #334155;
+  height: 36px;
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  gap: 10px;
+  padding: 0 14px;
+  gap: 7px;
 }
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.dot-red { background: #ef4444; }
-.dot-yellow { background: #eab308; }
-.dot-green { background: #22c55e; }
+.terminal-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.terminal-dot.red { background: #ef4444; }
+.terminal-dot.yellow { background: #eab308; }
+.terminal-dot.green { background: #22c55e; }
 .terminal-body {
-  background: #111;
-  padding: 32px 40px;
-}
-.prompt-line {
+  padding: 24px 28px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 28px;
-  color: #666;
+  font-size: 22px;
   line-height: 2;
 }
-.prompt-line .cmd { color: #ea580c; }
-.prompt-line .flag { color: #22c55e; }
-
-.diagram {
-  display: flex;
+.terminal-line {
+  color: #94a3b8;
+}
+.terminal-line .prompt { color: #4ade80; }
+.terminal-line .cmd { color: #60a5fa; }
+.terminal-line .flag { color: #4ade80; }
+.terminal-line .str { color: #fbbf24; }
+.terminal-line .comment { color: #64748b; }
+.notify-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 40px;
-}
-.pane-box {
-  background: #111;
-  border: 2px solid #555;
-  border-radius: 12px;
-  padding: 24px 32px;
-  text-align: center;
-  flex: 1;
-}
-.pane-box.active {
-  border-color: #ea580c;
-  box-shadow: 0 0 20px rgba(234, 88, 12, 0.2);
-}
-.pane-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 8px;
-}
-.pane-name {
-  font-size: 24px;
-  font-weight: 700;
-}
-.pane-box .pane-name { color: #999; }
-.pane-box.active .pane-name { color: #ea580c; }
-.pane-status {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 16px;
-  color: #666;
-  margin-top: 8px;
-}
-.divider-line {
-  font-size: 40px;
-  color: #ea580c;
-  flex-shrink: 0;
-}
-
-.points {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 28px;
-}
-.point {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-}
-.point-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(234, 88, 12, 0.15);
+  gap: 10px;
+  background: rgba(37, 99, 235, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.3);
   border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.point-text {
-  font-size: 30px;
-  line-height: 1.5;
-  color: #ccc;
-}
-.point-text strong { color: #e8e8e8; }
-.slide-count {
+  padding: 14px 24px;
+  margin-top: 8px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 20px;
-  color: #444;
+  color: #60a5fa;
+}
+.notify-icon {
+  font-size: 24px;
+}
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.point {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.point-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+.slide-counter {
   position: absolute;
   bottom: 40px;
-  right: 50px;
+  right: 60px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  color: #bbb;
 }
 </style>
 </head>
 <body>
-  <div class="tag">02 SPLIT</div>
-  <div class="title">cmux new-split</div>
-  <div class="desc">開発スピードが一気に上がる</div>
-  <div class="terminal">
-    <div class="terminal-bar">
-      <div class="dot dot-red"></div>
-      <div class="dot dot-yellow"></div>
-      <div class="dot dot-green"></div>
-    </div>
-    <div class="terminal-body">
-      <div class="prompt-line">$ <span class="cmd">cmux new-split</span> <span class="flag">right</span></div>
-      <div class="prompt-line">$ <span class="cmd">cmux new-split</span> <span class="flag">down</span></div>
+<div class="tag">02 NOTIFY</div>
+<div class="title">cmux notify</div>
+<div class="description">席を離れていても完了がわかる</div>
+<div class="terminal">
+  <div class="terminal-bar">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+  </div>
+  <div class="terminal-body">
+    <div class="terminal-line"><span class="prompt">$</span> <span class="cmd">cmux notify</span> <span class="flag">--on</span> <span class="str">complete</span></div>
+    <div class="terminal-line"><span class="comment"># タスクが終わったら通知</span></div>
+    <div class="terminal-line" style="margin-top: 4px;"><span class="prompt">$</span> <span class="cmd">cmux notify</span> <span class="flag">--sound</span></div>
+    <div class="terminal-line"><span class="comment"># サウンドで知らせる</span></div>
+    <div class="notify-badge">
+      <span class="notify-icon">&#x1F514;</span>
+      <span>Task completed in Pane 1</span>
     </div>
   </div>
-  <div class="diagram">
-    <div class="pane-box">
-      <div class="pane-label">PANE 1</div>
-      <div class="pane-name">claude "フロント実装"</div>
-      <div class="pane-status">running...</div>
-    </div>
-    <div class="divider-line">|</div>
-    <div class="pane-box active">
-      <div class="pane-label">PANE 2</div>
-      <div class="pane-name">claude "API設計"</div>
-      <div class="pane-status">running...</div>
-    </div>
-  </div>
-  <div class="points">
-    <div class="point">
-      <div class="point-icon">⇄</div>
-      <div class="point-text">フロントもバックエンドも<strong>同時に進む</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">◉</div>
-      <div class="point-text">他ペインの進捗も<strong>すぐ把握できる</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">⊞</div>
-      <div class="point-text">「順番待ち」の<strong>ムダがなくなる</strong></div>
-    </div>
-  </div>
-  <div class="slide-count">3 / 5</div>
+</div>
+<div class="points">
+  <div class="point"><span class="point-icon">&#x1F514;</span>作業が終わったら通知が届く</div>
+  <div class="point"><span class="point-icon">&#x2615;</span>席を離れていても完了がわかる</div>
+  <div class="point"><span class="point-icon">&#x26A1;</span>「終わった？」の確認作業がゼロに</div>
+</div>
+<div class="slide-counter">3 / 5</div>
 </body>
 </html>

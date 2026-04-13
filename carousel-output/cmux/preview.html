@@ -2,47 +2,76 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>cmux カルーセル プレビュー</title>
+<title>cmux Carousel Preview</title>
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
-  background: #1a1a1a;
-  color: #e8e8e8;
-  font-family: sans-serif;
+  background: #e5e5e5;
   padding: 40px;
+  font-family: sans-serif;
+}
+h1 {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #333;
+}
+.slides {
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: center;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 20px;
 }
 .slide-wrapper {
+  flex-shrink: 0;
   width: 500px;
   height: 500px;
   overflow: hidden;
-  border: 1px solid #333;
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  position: relative;
 }
 .slide-wrapper iframe {
+  transform: scale(0.463);
+  transform-origin: top left;
   width: 1080px;
   height: 1080px;
   border: none;
-  transform: scale(0.463);
-  transform-origin: top left;
 }
-h2 {
-  width: 100%;
-  text-align: center;
-  margin: 0 0 20px;
-  font-size: 24px;
-  color: #ea580c;
+.slide-label {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 6px;
 }
 </style>
 </head>
 <body>
-  <h2>cmux カルーセル プレビュー（5枚）</h2>
-  <div class="slide-wrapper"><iframe src="slide1.html"></iframe></div>
-  <div class="slide-wrapper"><iframe src="slide2.html"></iframe></div>
-  <div class="slide-wrapper"><iframe src="slide3.html"></iframe></div>
-  <div class="slide-wrapper"><iframe src="slide4.html"></iframe></div>
-  <div class="slide-wrapper"><iframe src="slide5.html"></iframe></div>
+<h1>cmux Carousel Preview</h1>
+<div class="slides">
+  <div class="slide-wrapper">
+    <iframe src="slide1.html"></iframe>
+    <div class="slide-label">Slide 1</div>
+  </div>
+  <div class="slide-wrapper">
+    <iframe src="slide2.html"></iframe>
+    <div class="slide-label">Slide 2</div>
+  </div>
+  <div class="slide-wrapper">
+    <iframe src="slide3.html"></iframe>
+    <div class="slide-label">Slide 3</div>
+  </div>
+  <div class="slide-wrapper">
+    <iframe src="slide4.html"></iframe>
+    <div class="slide-label">Slide 4</div>
+  </div>
+  <div class="slide-wrapper">
+    <iframe src="slide5.html"></iframe>
+    <div class="slide-label">Slide 5</div>
+  </div>
+</div>
 </body>
 </html>
