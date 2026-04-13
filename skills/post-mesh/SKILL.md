@@ -41,7 +41,7 @@ npx skills update
 4. セットアップを実行:
 
 ```bash
-node ./scripts/post-mesh.js setup --key YOUR_API_KEY --global
+./scripts/post-mesh.js setup --key YOUR_API_KEY --global
 ```
 
 `--global` を指定すると `~/.config/post-mesh/config.json` に保存されます（推奨）。指定しない場合はカレントディレクトリの `.post-mesh/config.json` に保存されます。
@@ -59,8 +59,8 @@ node ./scripts/post-mesh.js setup --key YOUR_API_KEY --global
 ### セットアップの確認
 
 ```bash
-node ./scripts/post-mesh.js config show
-node ./scripts/post-mesh.js account
+./scripts/post-mesh.js config show
+./scripts/post-mesh.js account
 ```
 
 ## CLIコマンド
@@ -114,7 +114,7 @@ node ./scripts/post-mesh.js account
 2. `--data` にファイルの中身を渡す:
 
 ```bash
-node ./scripts/post-mesh.js posts create --data "$(cat /tmp/post-data.json)"
+./scripts/post-mesh.js posts create --data "$(cat /tmp/post-data.json)"
 ```
 
 `allowed-tools` の制約上、`cat > /tmp/...` 等のBashコマンドでファイルを作成できない。必ずWriteツールを使うこと。
@@ -160,10 +160,10 @@ node ./scripts/post-mesh.js posts create --data "$(cat /tmp/post-data.json)"
 
 ```bash
 # 1. Xの連携アカウントを確認
-node ./scripts/post-mesh.js connections --platform x
+./scripts/post-mesh.js connections --platform x
 
 # 2. 投稿
-node ./scripts/post-mesh.js posts create --data '{
+./scripts/post-mesh.js posts create --data '{
   "category": "text",
   "caption": "こんにちは！",
   "targets": [{"connection_id": "conn_abc", "caption": "こんにちは！"}]
@@ -174,11 +174,11 @@ node ./scripts/post-mesh.js posts create --data '{
 
 ```bash
 # 1. 画像をアップロード
-node ./scripts/post-mesh.js media upload ./photo1.jpg
-node ./scripts/post-mesh.js media upload ./photo2.jpg
+./scripts/post-mesh.js media upload ./photo1.jpg
+./scripts/post-mesh.js media upload ./photo2.jpg
 
 # 2. media_ids を指定して投稿
-node ./scripts/post-mesh.js posts create --data '{
+./scripts/post-mesh.js posts create --data '{
   "category": "image",
   "caption": "写真です",
   "media_ids": ["media_abc", "media_def"],
@@ -190,10 +190,10 @@ node ./scripts/post-mesh.js posts create --data '{
 
 ```bash
 # 1. 動画をアップロード
-node ./scripts/post-mesh.js media upload ./video.mp4
+./scripts/post-mesh.js media upload ./video.mp4
 
 # 2. media_id を指定して投稿（YouTubeは youtube_title が必須）
-node ./scripts/post-mesh.js posts create --data '{
+./scripts/post-mesh.js posts create --data '{
   "category": "video",
   "caption": "新しい動画です！",
   "media_id": "media_abc",
@@ -210,7 +210,7 @@ node ./scripts/post-mesh.js posts create --data '{
 ターゲットを追加するだけで複数プラットフォームに同時投稿できます。各ターゲットに個別のキャプションを設定可能:
 
 ```bash
-node ./scripts/post-mesh.js posts create --data '{
+./scripts/post-mesh.js posts create --data '{
   "category": "text",
   "caption": "お知らせです！",
   "targets": [
@@ -226,7 +226,7 @@ node ./scripts/post-mesh.js posts create --data '{
 `scheduled_at` にISO 8601形式の未来の日時を指定:
 
 ```bash
-node ./scripts/post-mesh.js posts create --data '{
+./scripts/post-mesh.js posts create --data '{
   "category": "text",
   "caption": "おはようございます！",
   "targets": [{"connection_id": "conn_x", "caption": "おはようございます！"}],
@@ -239,7 +239,7 @@ node ./scripts/post-mesh.js posts create --data '{
 即時投稿の場合、ステータスは最初 `processing` になります。完了するまで確認してください:
 
 ```bash
-node ./scripts/post-mesh.js posts get <post-id>
+./scripts/post-mesh.js posts get <post-id>
 ```
 
 - `platforms[].status` が `posted` または `failed` になったら完了
@@ -255,7 +255,7 @@ node ./scripts/post-mesh.js posts get <post-id>
 `can_cancel: true` の投稿のみキャンセル可能:
 
 ```bash
-node ./scripts/post-mesh.js posts cancel <post-id>
+./scripts/post-mesh.js posts cancel <post-id>
 ```
 
 ## 推奨ワークフロー
