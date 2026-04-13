@@ -334,7 +334,7 @@ async function main() {
       description: "CLI for post mesh — multi-platform social media posting",
       platforms: ["youtube", "tiktok", "instagram", "threads", "x", "facebook"],
       commands: Object.keys(COMMANDS),
-      usage: "node post-mesh.js <command> [subcommand] [options]",
+      usage: "./scripts/post-mesh.js <command> [subcommand] [options]",
       docs: "https://post-mesh.com/api/openapi",
     });
     return;
