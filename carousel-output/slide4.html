@@ -26,96 +26,51 @@ body {
   font-weight: 700;
   padding: 8px 20px;
   border-radius: 8px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   letter-spacing: 2px;
 }
 .title {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 52px;
+  font-size: 44px;
   font-weight: 700;
   color: #ea580c;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
 }
-.desc {
+.problem {
+  font-size: 34px;
+  color: #999;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.problem .emoji { margin-right: 8px; }
+.solution {
   font-size: 36px;
   font-weight: 700;
   color: #e8e8e8;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
+  line-height: 1.5;
 }
-.terminal {
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 44px;
-  box-shadow: 0 0 40px rgba(234, 88, 12, 0.1);
-}
-.terminal-bar {
-  background: #1a1a1a;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 10px;
-}
-.dot { width: 12px; height: 12px; border-radius: 50%; }
-.dot-red { background: #ef4444; }
-.dot-yellow { background: #eab308; }
-.dot-green { background: #22c55e; }
-.terminal-body {
-  background: #111;
-  padding: 32px 40px;
-}
-.prompt-line {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 26px;
-  color: #666;
-  line-height: 2;
-}
-.prompt-line .cmd { color: #ea580c; }
-.prompt-line .flag { color: #22c55e; }
-.prompt-line .str { color: #facc15; }
+.solution .accent { color: #ea580c; }
 
-.diagram {
+.screenshot-area {
+  width: 820px;
+  height: 300px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 44px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  margin-bottom: 36px;
 }
-.branch-box {
-  background: #111;
-  border: 2px solid #333;
-  border-radius: 12px;
-  padding: 20px 28px;
-  text-align: center;
-}
-.branch-box.original {
-  border-color: #555;
-}
-.branch-box.forked {
-  border-color: #ea580c;
-  box-shadow: 0 0 20px rgba(234, 88, 12, 0.2);
-}
-.branch-label {
+.screenshot-placeholder {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 8px;
-}
-.branch-name {
   font-size: 24px;
-  font-weight: 700;
-}
-.branch-box.original .branch-name { color: #999; }
-.branch-box.forked .branch-name { color: #ea580c; }
-.arrow {
-  font-size: 40px;
-  color: #ea580c;
-}
-.branch-status {
-  font-size: 18px;
-  color: #666;
-  margin-top: 8px;
+  color: #333;
+  letter-spacing: 4px;
 }
 
 .points {
@@ -123,7 +78,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 28px;
+  gap: 24px;
 }
 .point {
   display: flex;
@@ -160,44 +115,21 @@ body {
 </head>
 <body>
   <div class="tag">03 FORK</div>
-  <div class="title">--fork-session</div>
-  <div class="desc">今の流れを壊さず別方針を試す</div>
-  <div class="terminal">
-    <div class="terminal-bar">
-      <div class="dot dot-red"></div>
-      <div class="dot dot-yellow"></div>
-      <div class="dot dot-green"></div>
-    </div>
-    <div class="terminal-body">
-      <div class="prompt-line">$ <span class="cmd">claude</span> <span class="flag">--continue --fork-session</span></div>
-      <div class="prompt-line">$ <span class="cmd">claude</span> <span class="flag">--resume</span> <span class="str">"my-task"</span> <span class="flag">--fork-session</span></div>
-    </div>
-  </div>
-  <div class="diagram">
-    <div class="branch-box original">
-      <div class="branch-label">ORIGINAL</div>
-      <div class="branch-name">session-A</div>
-      <div class="branch-status">そのまま残る</div>
-    </div>
-    <div class="arrow">→</div>
-    <div class="branch-box forked">
-      <div class="branch-label">FORKED</div>
-      <div class="branch-name">session-B</div>
-      <div class="branch-status">新しい方向へ</div>
-    </div>
+  <div class="title">claude --continue --fork-session</div>
+  <div class="problem"><span class="emoji">😰</span>今のセッションの流れを壊さずに別アプローチを試したい</div>
+  <div class="solution"><span class="accent">→</span> --fork-sessionでセッションを分岐して安全に実験</div>
+  <div class="screenshot-area">
+    <img src="" alt="SCREENSHOT" style="display:none; width:100%; height:100%; object-fit:cover;">
+    <div class="screenshot-placeholder">SCREENSHOT</div>
   </div>
   <div class="points">
     <div class="point">
-      <div class="point-icon">😰</div>
-      <div class="point-text">「試したいけど<strong>壊したくない</strong>」→ <strong>分岐で安全に</strong></div>
+      <div class="point-icon">✓</div>
+      <div class="point-text">元セッションは<strong>そのまま残る</strong>から安心</div>
     </div>
     <div class="point">
       <div class="point-icon">◇</div>
-      <div class="point-text">元セッションは<strong>そのまま残る</strong></div>
-    </div>
-    <div class="point">
-      <div class="point-icon">⌥</div>
-      <div class="point-text">gitの<strong>ブランチ</strong>と同じ感覚</div>
+      <div class="point-text">gitの<strong>ブランチ</strong>と同じ感覚で使える</div>
     </div>
   </div>
   <div class="slide-count">4 / 5</div>
