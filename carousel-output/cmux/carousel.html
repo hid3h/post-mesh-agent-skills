@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #e0ddd8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 40px 0;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* ── 共通: スライド ── */
+.slide {
+  width: 1080px;
+  height: 1080px;
+  background: #f8f6f3;
+  color: #1a1a1a;
+  font-family: 'Noto Sans JP', sans-serif;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.slide-counter {
+  position: absolute;
+  bottom: 40px;
+  right: 60px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  color: #bbb;
+}
+
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  background: #2563eb;
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-bottom: 36px;
+}
+
+.title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 52px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.description {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 36px;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.point {
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.point-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+
+.point code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  background: rgba(37, 99, 235, 0.08);
+  padding: 1px 8px;
+  border-radius: 4px;
+  color: #2563eb;
+}
+
+.point strong {
+  font-weight: 700;
+}
+
+.screenshot {
+  width: 780px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 36px;
+}
+
+/* ── slide-1: フック ── */
+#slide-1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#slide-1 .top-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  color: #777;
+  margin-bottom: 40px;
+}
+
+#slide-1 .main-title {
+  font-size: 58px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+#slide-1 .main-title .accent {
+  color: #2563eb;
+}
+
+#slide-1 .subtitle {
+  font-size: 34px;
+  font-weight: 400;
+  color: #777;
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+#slide-1 .terminal {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 0;
+  width: 700px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+#slide-1 .terminal-bar {
+  background: #334155;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+#slide-1 .terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+#slide-1 .terminal-dot.red { background: #ef4444; }
+#slide-1 .terminal-dot.yellow { background: #eab308; }
+#slide-1 .terminal-dot.green { background: #22c55e; }
+
+#slide-1 .terminal-body {
+  padding: 28px 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  line-height: 2;
+}
+
+#slide-1 .terminal-line {
+  color: #94a3b8;
+}
+
+#slide-1 .terminal-line .prompt { color: #4ade80; }
+#slide-1 .terminal-line .cmd { color: #60a5fa; }
+#slide-1 .terminal-line .flag { color: #4ade80; }
+#slide-1 .terminal-line .str { color: #fbbf24; }
+
+#slide-1 .cursor {
+  display: inline-block;
+  width: 10px;
+  height: 24px;
+  background: #60a5fa;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── slide-2: ペイン分割 ── */
+#slide-2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 80px 90px;
+}
+
+#slide-2 .tag { align-self: flex-start; }
+#slide-2 .title { align-self: flex-start; }
+#slide-2 .description { align-self: flex-start; }
+
+/* ── slide-3: 自動通知 ── */
+#slide-3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 80px 90px;
+}
+
+#slide-3 .tag { align-self: flex-start; }
+#slide-3 .title {
+  align-self: flex-start;
+  font-size: 52px;
+  font-weight: 900;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+#slide-3 .description {
+  align-self: flex-start;
+  margin-bottom: 48px;
+}
+#slide-3 .points {
+  gap: 20px;
+}
+#slide-3 .point {
+  font-size: 32px;
+  gap: 16px;
+}
+#slide-3 .point-icon {
+  font-size: 28px;
+  width: 40px;
+}
+
+/* ── slide-4: Blue Ring ── */
+#slide-4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 80px 90px;
+}
+
+#slide-4 .description {
+  margin-bottom: 44px;
+}
+
+#slide-4 .ring-container {
+  background: #1e293b;
+  border-radius: 16px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+  margin-bottom: 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+#slide-4 .ring {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 6px solid #2563eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-shadow: 0 0 40px rgba(37, 99, 235, 0.4), 0 0 80px rgba(37, 99, 235, 0.15);
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.4), 0 0 80px rgba(37, 99, 235, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(37, 99, 235, 0.6), 0 0 120px rgba(37, 99, 235, 0.25);
+  }
+}
+
+#slide-4 .ring-check {
+  font-size: 48px;
+  color: #2563eb;
+  margin-bottom: 4px;
+}
+
+#slide-4 .ring-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+#slide-4 .points {
+  gap: 20px;
+}
+
+#slide-4 .point {
+  font-size: 32px;
+  gap: 16px;
+}
+
+#slide-4 .point-icon {
+  font-size: 28px;
+  width: 40px;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SLIDE 1: フック ===== -->
+<div id="slide-1" class="slide">
+  <div class="top-label">CLAUDE CODE USERS</div>
+  <div class="main-title">
+    <span class="accent">cmux</span><br>
+    コーディングエージェントの<br>ためのターミナル
+  </div>
+  <div class="subtitle">Claude Codeを並列で走らせ、通知で見守る</div>
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="terminal-dot red"></div>
+      <div class="terminal-dot yellow"></div>
+      <div class="terminal-dot green"></div>
+    </div>
+    <div class="terminal-body">
+      <div class="terminal-line"><span class="prompt">$</span> <span class="cmd">cmux</span> <span class="flag">--start</span></div>
+      <div class="terminal-line"><span class="prompt">$</span> <span class="cursor"></span></div>
+    </div>
+  </div>
+  <div class="slide-counter">1 / 4</div>
+</div>
+
+<!-- ===== SLIDE 2: ペイン分割 ===== -->
+<div id="slide-2" class="slide">
+  <div class="tag">01 PANE</div>
+  <div class="title">Cmd+Dが変わる</div>
+  <div class="description">同じCmd+D、でも中身が全然違う</div>
+  <img src="pane-screenshot.png" class="screenshot" alt="cmuxペイン分割">
+  <div class="points">
+    <div class="point"><span class="point-icon">&#x26A1;</span>各ペインが<strong>完全に独立</strong> — 別々のClaude Codeを同時実行</div>
+    <div class="point"><span class="point-icon">&#x1F441;</span><code>read-screen</code>で他ペインの出力を取得</div>
+    <div class="point"><span class="point-icon">&#x1F4E4;</span><code>send</code>で他ペインに指示を送信</div>
+  </div>
+  <div class="slide-counter">2 / 4</div>
+</div>
+
+<!-- ===== SLIDE 3: 自動通知 ===== -->
+<div id="slide-3" class="slide">
+  <div class="tag">02 NOTIFY</div>
+  <div class="title">自動通知</div>
+  <div class="description">席を離れていても完了がわかる</div>
+  <img src="notify-screenshot.png" class="screenshot" alt="cmux自動通知">
+  <div class="points">
+    <div class="point"><span class="point-icon">&#x1F514;</span><strong>デフォルトで通知ON</strong> — 設定不要</div>
+    <div class="point"><span class="point-icon">&#x2615;</span>席を離れていても完了がわかる</div>
+    <div class="point"><span class="point-icon">&#x26A1;</span>複数ペインの進捗も見逃さない</div>
+  </div>
+  <div class="slide-counter">3 / 4</div>
+</div>
+
+<!-- ===== SLIDE 4: Blue Ring ===== -->
+<div id="slide-4" class="slide">
+  <div class="tag">03 RING</div>
+  <div class="title">Blue Ring</div>
+  <div class="description">ペインが光って完了を知らせる</div>
+  <div class="ring-container">
+    <div class="ring">
+      <div class="ring-check">&#x2713;</div>
+      <div class="ring-text">Done</div>
+    </div>
+  </div>
+  <div class="points">
+    <div class="point"><span class="point-icon">&#x1F4A1;</span>デフォルトで設定済みのインジケーター</div>
+    <div class="point"><span class="point-icon">&#x1F535;</span>ペインが青く光って完了をお知らせ</div>
+    <div class="point"><span class="point-icon">&#x1F440;</span>複数ペインでもどれが終わったか一目瞭然</div>
+  </div>
+  <div class="slide-counter">4 / 4</div>
+</div>
+
+</body>
+</html>
