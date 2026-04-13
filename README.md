@@ -29,7 +29,7 @@ ln -s "$(pwd)/post-mesh-agent-skills/skills/post-mesh" ~/.claude/skills/post-mes
 ## できること
 
 - **テキスト投稿** — X、Threads、Facebook
-- **画像投稿** — X、Threads、Facebook
+- **画像投稿** — Instagram、X、Threads、Facebook
 - **動画投稿** — YouTube、TikTok、Instagram、Threads
 - **予約投稿** — 全プラットフォーム対応
 - **マルチプラットフォーム同時投稿** — 1回の指示で複数のSNSに投稿
@@ -48,7 +48,7 @@ ln -s "$(pwd)/post-mesh-agent-skills/skills/post-mesh" ~/.claude/skills/post-mes
 |------------------|----------|------|------|
 | YouTube          |          |      | o    |
 | TikTok           |          |      | o    |
-| Instagram        |          |      | o    |
+| Instagram        |          | o    | o    |
 | X                | o        | o    |      |
 | Threads          | o        | o    | o    |
 | Facebook         | o        | o    |      |
