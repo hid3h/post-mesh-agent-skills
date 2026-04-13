@@ -166,6 +166,13 @@ body {
   overflow: hidden;
   margin: 0 auto;
 }
+.slide-detail .screenshot-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
 .slide-detail .screenshot-placeholder {
   font-family: 'JetBrains Mono', monospace;
   font-size: 24px;
@@ -365,8 +372,7 @@ body {
   <div class="problem"><span class="emoji">😱</span>うっかりセッションを閉じてしまった / 翌日に続きをやりたい</div>
   <div class="solution"><span class="accent">→</span> --continueで直前のセッションをすぐ再開</div>
   <div class="screenshot-area">
-    <img src="" alt="SCREENSHOT" style="display:none; width:100%; height:100%; object-fit:cover;">
-    <div class="screenshot-placeholder">SCREENSHOT</div>
+    <img src="continue-screenshot.png" alt="--continue実行画面" style="width:100%; height:100%; object-fit:cover;">
   </div>
   <div class="points">
     <div class="point">
@@ -389,8 +395,7 @@ body {
   <div class="problem"><span class="emoji">🤔</span>複数セッションがあってどれを再開すればいいかわからない</div>
   <div class="solution"><span class="accent">→</span> --resumeでセッション一覧から選択して再開</div>
   <div class="screenshot-area">
-    <img src="" alt="SCREENSHOT" style="display:none; width:100%; height:100%; object-fit:cover;">
-    <div class="screenshot-placeholder">SCREENSHOT</div>
+    <img src="resume-screenshot.png" alt="--resume実行画面" style="width:100%; height:100%; object-fit:cover;">
   </div>
   <div class="points">
     <div class="point">
