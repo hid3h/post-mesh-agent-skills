@@ -23,7 +23,7 @@ ln -s "$(pwd)/post-mesh-agent-skills/skills/post-mesh" ~/.claude/skills/post-mes
 4. Claude Code で以下を実行:
 
 ```
-/post-mesh setup --key YOUR_API_KEY
+/post-mesh setup --key YOUR_API_KEY --global
 ```
 
 ## できること

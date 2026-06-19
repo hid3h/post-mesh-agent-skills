@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-04-13
+last-updated: 2026-06-19
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -41,7 +41,7 @@ npx skills update
 4. セットアップを実行:
 
 ```bash
-./scripts/post-mesh.js setup --key YOUR_API_KEY --global
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js setup --key YOUR_API_KEY --global
 ```
 
 `--global` を指定すると `~/.config/post-mesh/config.json` に保存されます（推奨）。指定しない場合はカレントディレクトリの `.post-mesh/config.json` に保存されます。
@@ -59,8 +59,8 @@ npx skills update
 ### セットアップの確認
 
 ```bash
-./scripts/post-mesh.js config show
-./scripts/post-mesh.js account
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js config show
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js account
 ```
 
 ## CLIコマンド
@@ -114,7 +114,7 @@ npx skills update
 2. `--data` にファイルの中身を渡す:
 
 ```bash
-./scripts/post-mesh.js posts create --data "$(cat /tmp/post-data.json)"
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts create --data "$(cat /tmp/post-data.json)"
 ```
 
 `allowed-tools` の制約上、`cat > /tmp/...` 等のBashコマンドでファイルを作成できない。必ずWriteツールを使うこと。
@@ -160,10 +160,10 @@ npx skills update
 
 ```bash
 # 1. Xの連携アカウントを確認
-./scripts/post-mesh.js connections --platform x
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js connections --platform x
 
 # 2. 投稿
-./scripts/post-mesh.js posts create --data '{
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts create --data '{
   "category": "text",
   "caption": "こんにちは！",
   "targets": [{"connection_id": "conn_abc", "caption": "こんにちは！"}]
@@ -174,11 +174,11 @@ npx skills update
 
 ```bash
 # 1. 画像をアップロード
-./scripts/post-mesh.js media upload ./photo1.jpg
-./scripts/post-mesh.js media upload ./photo2.jpg
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js media upload ./photo1.jpg
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js media upload ./photo2.jpg
 
 # 2. media_ids を指定して投稿
-./scripts/post-mesh.js posts create --data '{
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts create --data '{
   "category": "image",
   "caption": "写真です",
   "media_ids": ["media_abc", "media_def"],
@@ -190,10 +190,10 @@ npx skills update
 
 ```bash
 # 1. 動画をアップロード
-./scripts/post-mesh.js media upload ./video.mp4
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js media upload ./video.mp4
 
 # 2. media_id を指定して投稿（YouTubeは youtube_title が必須）
-./scripts/post-mesh.js posts create --data '{
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts create --data '{
   "category": "video",
   "caption": "新しい動画です！",
   "media_id": "media_abc",
@@ -210,7 +210,7 @@ npx skills update
 ターゲットを追加するだけで複数プラットフォームに同時投稿できます。各ターゲットに個別のキャプションを設定可能:
 
 ```bash
-./scripts/post-mesh.js posts create --data '{
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts create --data '{
   "category": "text",
   "caption": "お知らせです！",
   "targets": [
@@ -226,7 +226,7 @@ npx skills update
 `scheduled_at` にISO 8601形式の未来の日時を指定:
 
 ```bash
-./scripts/post-mesh.js posts create --data '{
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts create --data '{
   "category": "text",
   "caption": "おはようございます！",
   "targets": [{"connection_id": "conn_x", "caption": "おはようございます！"}],
@@ -239,7 +239,7 @@ npx skills update
 即時投稿の場合、ステータスは最初 `processing` になります。完了するまで確認してください:
 
 ```bash
-./scripts/post-mesh.js posts get <post-id>
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts get <post-id>
 ```
 
 - `platforms[].status` が `posted` または `failed` になったら完了
@@ -255,7 +255,7 @@ npx skills update
 `can_cancel: true` の投稿のみキャンセル可能:
 
 ```bash
-./scripts/post-mesh.js posts cancel <post-id>
+${CLAUDE_SKILL_DIR}/scripts/post-mesh.js posts cancel <post-id>
 ```
 
 ## 推奨ワークフロー
