@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-04-13
+last-updated: 2026-06-22
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -65,7 +65,7 @@ npx skills update
 
 ## CLIコマンド
 
-すべてのコマンドはJSONを出力します。
+すべてのコマンドはJSONを出力します。レスポンスは `{ "ok": true, "status": 200, "data": ... }` の形で、実データは `data` の中にあります（`connections` は `data` が配列、`account` は `data.user`、`posts get`/`posts create` は `data.platforms[]`）。
 
 ### 設定
 
@@ -242,11 +242,11 @@ npx skills update
 ./scripts/post-mesh.js posts get <post-id>
 ```
 
-- `platforms[].status` が `posted` または `failed` になったら完了
+- `data.platforms[].status` が `posted` または `failed` になったら完了
 - まだ `processing` なら `posts get` を再実行する（ツール呼び出し間の自然な間隔で十分。`sleep`は使わない）
 - テキスト・画像は最大30秒、動画は最大60秒で完了する
-- 成功時は `platforms[].external_url` にライブURLが入る — ユーザーに表示する
-- 失敗時は `platforms[].error_message` にエラー内容が入る
+- 成功時は `data.platforms[].external_url` にライブURLが入る — ユーザーに表示する
+- 失敗時は `data.platforms[].error_message` にエラー内容が入る
 
 予約投稿の場合、ステータスは即座に `scheduled` になるためポーリング不要。
 

@@ -151,11 +151,13 @@ async function cmdSetup(args) {
     });
   } else {
     out({
-      success: true,
-      message: `API key saved to ${scope} config (verification failed — key may be invalid)`,
+      success: false,
+      verified: false,
+      message: `API key saved to ${scope} config, but verification FAILED — the key may be invalid. Fix the key and run setup again.`,
       config_path: configPath,
       verification_error: result,
     });
+    process.exit(1);
   }
 }
 
