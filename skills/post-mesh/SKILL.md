@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-06-22
+last-updated: 2026-07-10
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -16,7 +16,7 @@ post mesh は複数のSNSプラットフォームへの投稿を一括で作成�
 | プラットフォーム | テキスト | 画像 | 動画 |
 |------------------|----------|------|------|
 | YouTube          |          |      | o    |
-| TikTok           |          |      | o    |
+| TikTok           |          | o    | o    |
 | Instagram        |          | o    | o    |
 | X                | o        | o    |      |
 | Threads          | o        | o    | o    |
@@ -151,6 +151,9 @@ npx skills update
 | `targets[].connection_id` | 常に | `connections` コマンドで取得 |
 | `targets[].caption` | 常に | プラットフォームごとのキャプション |
 | `targets[].youtube_title` | YouTube | YouTubeの場合は必須 |
+| `targets[].is_ai_generated` | いいえ | TikTokのみ有効。`true`でTikTok上に「AI generated」ラベルを表示 |
+| `targets[].tiktok_draft` | いいえ | TikTokのみ有効（動画・画像）。`true`で公開せずTikTokアプリの受信箱へ下書きを送る。TikTok以外のターゲットでは無視される |
+| `targets[].tiktok_auto_add_music` | いいえ | TikTokへの画像投稿のみ有効。`true`でTikTokのおすすめ音楽を自動で付ける |
 | `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
 | `media_id` | `video` のみ | `media upload` で取得 |
 | `media_ids` | `image` のみ | `media upload` で取得したIDの配列 |
@@ -204,6 +207,39 @@ npx skills update
   ]
 }'
 ```
+
+### TikTokへの下書き送信
+
+`targets[].tiktok_draft` に `true` を指定すると、公開せずTikTokアプリの受信箱へ下書きとして送れます。動画・画像のどちらでも使えます:
+
+```bash
+./scripts/post-mesh.js posts create --data '{
+  "category": "video",
+  "caption": "下書きを送ります",
+  "media_id": "media_abc",
+  "targets": [{"connection_id": "conn_tt", "caption": "下書きを送ります", "tiktok_draft": true}]
+}'
+```
+
+- 動画の下書きにはキャプションが送られない（TikTokアプリ側で入力する）
+- 保留中の下書きは24時間あたり5件まで
+- `tiktok_auto_add_music: true` との同時指定は400エラー（`tiktok_auto_add_music cannot be used with tiktok_draft`）
+
+### TikTokへの画像投稿とおすすめ音楽
+
+`targets[].tiktok_auto_add_music` に `true` を指定すると、画像をそのまま公開するときにTikTokのおすすめ音楽が自動で付きます:
+
+```bash
+./scripts/post-mesh.js posts create --data '{
+  "category": "image",
+  "caption": "写真です",
+  "media_ids": ["media_abc", "media_def"],
+  "targets": [{"connection_id": "conn_tt", "caption": "写真です #tiktok", "tiktok_auto_add_music": true}]
+}'
+```
+
+- `image` 以外のカテゴリで指定すると400エラー
+- 下書き（`tiktok_draft: true`）には音楽を付けられない
 
 ### マルチプラットフォーム投稿
 
@@ -265,7 +301,7 @@ APIを呼び出す前に、まずユーザーと会話してください。何�
 1. **意図を確認** — ユーザーに何を投稿したいか（テキスト/画像/動画）、どのプラットフォームに投稿するか、即時か予約かを聞く
 2. **連携アカウントを確認し、ユーザーに選んでもらう** — `connections` で利用可能なアカウントを取得。ユーザーが選んだカテゴリに対応するプラットフォームのみ表示:
    - **テキスト**: X, Threads, Facebook
-   - **画像**: Instagram, X, Threads, Facebook
+   - **画像**: Instagram, TikTok, X, Threads, Facebook
    - **動画**: YouTube, TikTok, Instagram, Threads
 
    プラットフォームごとにグループ化して表示:
