@@ -126,7 +126,6 @@ npx skills update
 ```json
 {
   "category": "text",
-  "caption": "投稿テキスト",
   "targets": [
     {
       "connection_id": "conn_abc",
@@ -146,7 +145,6 @@ npx skills update
 | フィールド | 必須 | 備考 |
 |------------|------|------|
 | `category` | 常に | `text`, `image`, `video` のいずれか |
-| `caption` | 常に | デフォルトのキャプション |
 | `targets` | 常に | 1つ以上のターゲット |
 | `targets[].connection_id` | 常に | `connections` コマンドで取得 |
 | `targets[].caption` | 常に | プラットフォームごとのキャプション |
@@ -156,7 +154,7 @@ npx skills update
 | `targets[].tiktok_auto_add_music` | いいえ | TikTokへの画像投稿のみ有効。`true`でTikTokのおすすめ音楽を自動で付ける |
 | `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
 | `media_id` | `video` のみ | `media upload` で取得 |
-| `media_ids` | `image` のみ | `media upload` で取得したIDの配列 |
+| `media_ids` | `image` のみ | `media upload` で取得したIDの配列（1〜4件） |
 | `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
 
 ### テキスト投稿
@@ -168,7 +166,6 @@ npx skills update
 # 2. 投稿
 ./scripts/post-mesh.js posts create --data '{
   "category": "text",
-  "caption": "こんにちは！",
   "targets": [{"connection_id": "conn_abc", "caption": "こんにちは！"}]
 }'
 ```
@@ -183,7 +180,6 @@ npx skills update
 # 2. media_ids を指定して投稿
 ./scripts/post-mesh.js posts create --data '{
   "category": "image",
-  "caption": "写真です",
   "media_ids": ["media_abc", "media_def"],
   "targets": [{"connection_id": "conn_x", "caption": "写真です #photography"}]
 }'
@@ -198,7 +194,6 @@ npx skills update
 # 2. media_id を指定して投稿（YouTubeは youtube_title が必須）
 ./scripts/post-mesh.js posts create --data '{
   "category": "video",
-  "caption": "新しい動画です！",
   "media_id": "media_abc",
   "thumbnail_time": 3.0,
   "targets": [
@@ -215,7 +210,6 @@ npx skills update
 ```bash
 ./scripts/post-mesh.js posts create --data '{
   "category": "video",
-  "caption": "下書きを送ります",
   "media_id": "media_abc",
   "targets": [{"connection_id": "conn_tt", "caption": "下書きを送ります", "tiktok_draft": true}]
 }'
@@ -232,7 +226,6 @@ npx skills update
 ```bash
 ./scripts/post-mesh.js posts create --data '{
   "category": "image",
-  "caption": "写真です",
   "media_ids": ["media_abc", "media_def"],
   "targets": [{"connection_id": "conn_tt", "caption": "写真です #tiktok", "tiktok_auto_add_music": true}]
 }'
@@ -248,7 +241,6 @@ npx skills update
 ```bash
 ./scripts/post-mesh.js posts create --data '{
   "category": "text",
-  "caption": "お知らせです！",
   "targets": [
     {"connection_id": "conn_x", "caption": "お知らせです！ #X"},
     {"connection_id": "conn_threads", "caption": "お知らせです！"},
@@ -264,7 +256,6 @@ npx skills update
 ```bash
 ./scripts/post-mesh.js posts create --data '{
   "category": "text",
-  "caption": "おはようございます！",
   "targets": [{"connection_id": "conn_x", "caption": "おはようございます！"}],
   "scheduled_at": "2026-04-01T09:00:00Z"
 }'
@@ -323,7 +314,7 @@ APIを呼び出す前に、まずユーザーと会話してください。何�
 
 - **投稿前に必ず確認する。** ユーザーが「今すぐ投稿して」「すぐに公開して」と明示しない限り、コンテンツとターゲットを先に表示する。即時投稿は公開後に取り消せない。
 - **投稿先アカウントを必ずユーザーに確認する。** 連携アカウントが1つしかなくても勝手に選ばない。「Threads @hide_carryに投稿しますか？」のように確認し、ユーザーの回答を待つ。これは投稿が取り消せない操作だから重要。
-- **キャプションを統一する。** ユーザーがプラットフォーム別のテキストを望まない限り、`caption` と `targets[].caption` は同じテキストを使う。
+- **キャプションを統一する。** ユーザーがプラットフォーム別のテキストを望まない限り、すべての `targets[].caption` に同じテキストを使う。キャプションは `targets[].caption` だけで指定する（ボディ直下の `caption` はAPIが読まない）。
 - **YouTubeにはタイトルが必須。** YouTubeの連携アカウントには必ず `youtube_title` を含める。
 - **タイムゾーンを変換する。** ユーザーが「明日の9時」と言ったら、ユーザーのタイムゾーンでISO 8601に変換する。
 - **重複投稿をしない。** 同じアカウントに同じコンテンツを2回投稿しない。
