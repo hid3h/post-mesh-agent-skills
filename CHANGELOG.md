@@ -9,7 +9,7 @@
 - `targets[].tiktok_auto_add_music` を記載（TikTokへの画像投稿でおすすめ音楽を自動追加。`image` 以外や `tiktok_draft` との併用は400）
 - 未記載だった `targets[].is_ai_generated`（TikTokのAI生成ラベル）を記載
 - SKILL.mdに `tiktok_draft` と `tiktok_auto_add_music` の投稿例を追加
-- 投稿例からAPIが読まないトップレベル `caption` を削除、`media_ids` の上限（1〜4件）を明記
+- 投稿例からAPIが読まないトップレベル `caption` を削除、`media_ids` の枚数上限（投稿先のうち最も厳しいプラットフォームの上限）を明記
 
 ## 2026-04-13
 

@@ -154,7 +154,7 @@ npx skills update
 | `targets[].tiktok_auto_add_music` | いいえ | TikTokへの画像投稿のみ有効。`true`でTikTokのおすすめ音楽を自動で付ける |
 | `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
 | `media_id` | `video` のみ | `media upload` で取得 |
-| `media_ids` | `image` のみ | `media upload` で取得したIDの配列（1〜4件） |
+| `media_ids` | `image` のみ | `media upload` で取得したIDの配列。1件以上。上限は投稿先のうち最も厳しいプラットフォームの枚数上限（X 4枚、Instagram・Facebook 10枚、Threads 20枚、TikTok 35枚） |
 | `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
 
 ### テキスト投稿
