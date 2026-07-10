@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-10
+
+### TikTokの画像投稿・下書き・おすすめ音楽の記載を追加
+
+- プラットフォーム対応表にTikTokの画像投稿を追加（README.md、SKILL.md）
+- `targets[].tiktok_draft` を記載（公開せずTikTokアプリの受信箱へ下書き送信。動画・画像対応、24時間あたり5件まで）
+- `targets[].tiktok_auto_add_music` を記載（TikTokへの画像投稿でおすすめ音楽を自動追加。`image` 以外や `tiktok_draft` との併用は400）
+- 未記載だった `targets[].is_ai_generated`（TikTokのAI生成ラベル）を記載
+- SKILL.mdに `tiktok_draft` と `tiktok_auto_add_music` の投稿例を追加
+- 投稿例からAPIが読まないトップレベル `caption` を削除、`media_ids` の上限（1〜4件）を明記
+
 ## 2026-04-13
 
 ### SKILL.mdの安全性・信頼性を改善
