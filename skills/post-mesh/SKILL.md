@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-07-10
+last-updated: 2026-07-12
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -18,7 +18,7 @@ post mesh は複数のSNSプラットフォームへの投稿を一括で作成�
 | YouTube          |          |      | o    |
 | TikTok           |          | o    | o    |
 | Instagram        |          | o    | o    |
-| X                | o        | o    |      |
+| X                | o        | o    | o    |
 | Threads          | o        | o    | o    |
 | Facebook         | o        | o    |      |
 
@@ -94,6 +94,18 @@ npx skills update
 - **画像**: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`（最大20MB）
 
 署名付きアップロードURLの有効期限は15分です。
+
+投稿先ごとの動画の制約（超えると投稿作成時に400エラーになる）:
+
+| 投稿先 | 長さ | ファイルサイズ |
+|--------|------|----------------|
+| X | 0.5〜140秒 | 500MB |
+| TikTok | 180秒以内 | 500MB |
+| Instagram | 3〜900秒 | 300MB |
+| Threads | 300秒以内 | 500MB |
+| YouTube | 制限なし | 500MB |
+
+長い動画を複数の投稿先へ同時に出すときは、いちばん厳しい投稿先に合わせる。
 
 ### 投稿
 
@@ -198,7 +210,8 @@ npx skills update
   "thumbnail_time": 3.0,
   "targets": [
     {"connection_id": "conn_yt", "caption": "ぜひ見てください！ #youtube", "youtube_title": "動画タイトル"},
-    {"connection_id": "conn_tt", "caption": "ぜひ見てください！ #tiktok"}
+    {"connection_id": "conn_tt", "caption": "ぜひ見てください！ #tiktok"},
+    {"connection_id": "conn_x", "caption": "ぜひ見てください！"}
   ]
 }'
 ```
@@ -293,7 +306,7 @@ APIを呼び出す前に、まずユーザーと会話してください。何�
 2. **連携アカウントを確認し、ユーザーに選んでもらう** — `connections` で利用可能なアカウントを取得。ユーザーが選んだカテゴリに対応するプラットフォームのみ表示:
    - **テキスト**: X, Threads, Facebook
    - **画像**: Instagram, TikTok, X, Threads, Facebook
-   - **動画**: YouTube, TikTok, Instagram, Threads
+   - **動画**: YouTube, TikTok, Instagram, X, Threads
 
    プラットフォームごとにグループ化して表示:
    ```

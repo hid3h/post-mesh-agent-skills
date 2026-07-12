@@ -66,7 +66,7 @@ ln -s "$(pwd)/post-mesh-agent-skills/skills/post-mesh" ~/.claude/skills/post-mes
 | YouTube          |          |      | o    |
 | TikTok           |          | o    | o    |
 | Instagram        |          | o    | o    |
-| X                | o        | o    |      |
+| X                | o        | o    | o    |
 | Threads          | o        | o    | o    |
 | Facebook         | o        | o    |      |
 
