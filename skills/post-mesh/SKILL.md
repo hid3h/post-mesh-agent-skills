@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-07-15
+last-updated: 2026-07-23
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -21,6 +21,16 @@ post mesh は複数のSNSプラットフォームへの投稿を一括で作成�
 | X                | o        | o    |      |
 | Threads          | o        | o    | o    |
 | Facebook         | o        | o    |      |
+
+## 「下書き」という依頼の扱い
+
+post mesh本体に、投稿を下書き状態で保存する機能は**ない**。APIで作れるのは即時投稿と予約投稿の2つだけ。「下書き」に関係する唯一の機能は `tiktok_draft`（TikTok**アプリの受信箱**へ下書きを送る。post mesh内に保存されるものではない）。
+
+ユーザーが「下書き」「下書き投稿」「draft」と言ったら、どの機能にも勝手にマッピングせず、次の選択肢を提示して意図を確認する:
+
+1. TikTokアプリの受信箱への下書き送信（`tiktok_draft`、TikTokのみ。「TikTokへの下書き送信」の節を参照）
+2. 予約投稿（`scheduled_at`）— ただし指定時刻に**自動公開される**ものであり、下書きではないことを明示する
+3. どちらでもない場合（例: post mesh内に未公開のまま保存したい）は、post meshでは実現できないと伝える
 
 ## スキルの更新確認
 
@@ -161,7 +171,7 @@ npx skills update
 | `category` | 常に | `text`, `image`, `video` のいずれか |
 | `targets` | 常に | 1つ以上のターゲット |
 | `targets[].connection_id` | 常に | `connections` コマンドで取得 |
-| `targets[].caption` | 常に | プラットフォームごとのキャプション |
+| `targets[].caption` | 常に | プラットフォームごとのキャプション。1文字以上（空文字はAPIが400で拒否）。ユーザーがキャプションを「後で」と保留しているときは、空文字や仮テキストで勝手に埋めず、確定してから投稿を作成する |
 | `targets[].youtube_title` | YouTube | YouTubeの場合は必須 |
 | `targets[].is_ai_generated` | いいえ | TikTokのみ有効。`true`でTikTok上に「AI generated」ラベルを表示 |
 | `targets[].tiktok_draft` | いいえ | TikTokのみ有効（動画・画像）。`true`で公開せずTikTokアプリの受信箱へ下書きを送る。TikTok以外のターゲットでは無視される |
