@@ -91,7 +91,7 @@ npx skills update
 
 対応ファイル:
 - **動画**: `.mp4`, `.mov`（最大1GB）
-- **画像**: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`（最大20MB）
+- **画像**: `.jpg`, `.jpeg`, `.png`, `.webp`（最大20MB）
 
 署名付きアップロードURLの有効期限は15分です。
 
