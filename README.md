@@ -47,6 +47,7 @@ ln -s "$(pwd)/post-mesh-agent-skills/skills/post-mesh" ~/.claude/skills/post-mes
 - **画像投稿** — Instagram、TikTok、X、Threads、Facebook
 - **動画投稿** — YouTube、TikTok、Instagram、X、Threads
 - **予約投稿** — 全プラットフォーム対応
+- **下書き保存** — SNSへ配信せずpost meshに保存（公開はpost meshのWebアプリから）
 - **マルチプラットフォーム同時投稿** — 1回の指示で複数のSNSに投稿
 
 ## 使い方
