@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-07-23
+last-updated: 2026-07-30
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -18,19 +18,21 @@ post mesh は複数のSNSプラットフォームへの投稿を一括で作成�
 | YouTube          |          |      | o    |
 | TikTok           |          | o    | o    |
 | Instagram        |          | o    | o    |
-| X                | o        | o    |      |
+| X                | o        | o    | o    |
 | Threads          | o        | o    | o    |
 | Facebook         | o        | o    |      |
 
 ## 「下書き」という依頼の扱い
 
-post mesh本体に、投稿を下書き状態で保存する機能は**ない**。APIで作れるのは即時投稿と予約投稿の2つだけ。「下書き」に関係する唯一の機能は `tiktok_draft`（TikTok**アプリの受信箱**へ下書きを送る。post mesh内に保存されるものではない）。
+post meshは投稿を下書きとして保存できる。ボディに `draft: true` を指定すると、SNSへは配信されず、post mesh内に下書きとして保存される（「下書きの作成」の節を参照）。
 
-ユーザーが「下書き」「下書き投稿」「draft」と言ったら、どの機能にも勝手にマッピングせず、次の選択肢を提示して意図を確認する:
+ただし「下書き」という言葉が指しうる機能は3つあり、どれも意味が違う。**ユーザーが「下書き」「下書き投稿」「draft」と言ったとき、どれを指すか曖昧なら、勝手にマッピングせず次の選択肢を提示して確認する**:
 
-1. TikTokアプリの受信箱への下書き送信（`tiktok_draft`、TikTokのみ。「TikTokへの下書き送信」の節を参照）
-2. 予約投稿（`scheduled_at`）— ただし指定時刻に**自動公開される**ものであり、下書きではないことを明示する
-3. どちらでもない場合（例: post mesh内に未公開のまま保存したい）は、post meshでは実現できないと伝える
+1. **post meshに下書き保存**（`draft: true`）— SNSには出ない。post meshに保存され、後でWebアプリから公開する
+2. **TikTokアプリの受信箱への下書き送信**（`tiktok_draft`、TikTokのみ）— post mesh内ではなくTikTokアプリ側に届く（「TikTokへの下書き送信」の節を参照）
+3. **予約投稿**（`scheduled_at`）— 下書きではなく、指定時刻に**自動公開される**
+
+「まず下書きにしておいて、後で公開して」と言われた場合、下書きの作成まではAPIでできるが、**下書きから公開（即時・予約）への昇格はpost meshのWebアプリの編集画面でしかできない**。APIに投稿の更新エンドポイントが無いため、このスキルからは昇格できない。下書きを作った時点でその旨を伝え、公開はWebアプリ（[post-mesh.com](https://post-mesh.com)）で行ってもらう。
 
 ## スキルの更新確認
 
@@ -100,21 +102,35 @@ npx skills update
 | `media upload <file-path>` | メディアファイルをアップロードし `media_id` を返す |
 
 対応ファイル:
-- **動画**: `.mp4`, `.mov`（最大500MB）
-- **画像**: `.jpg`, `.jpeg`, `.png`, `.webp`, `.gif`（最大20MB）
+- **動画**: `.mp4`, `.mov`（最大1GB）
+- **画像**: `.jpg`, `.jpeg`, `.png`, `.webp`（最大20MB）
 
 署名付きアップロードURLの有効期限は15分です。
+
+投稿先ごとの動画の制約（超えると投稿作成時に400エラーになる）:
+
+| 投稿先 | 長さ | ファイルサイズ | その他 |
+|--------|------|----------------|--------|
+| X | 0.5〜140秒 | 512MB | |
+| TikTok | 180秒以内 | 制限なし | |
+| Instagram | 3〜900秒 | 300MB | |
+| Threads | 300秒以内 | 1GB | 映像ビットレート100Mbps以内 |
+| YouTube | 制限なし | 制限なし | |
+
+いずれの投稿先でも、アップロード自体の上限は1GB。長い動画を複数の投稿先へ同時に出すときは、いちばん厳しい投稿先に合わせる。
 
 ### 投稿
 
 | コマンド | 説明 |
 |----------|------|
-| `posts create --data '<JSON>'` | 投稿を作成（即時または予約） |
+| `posts create --data '<JSON>'` | 投稿を作成（即時・予約・下書き） |
 | `posts list [--status <s>] [--platform <p>] [--page N] [--limit N]` | 投稿を一覧表示 |
 | `posts get <id>` | 投稿の詳細とプラットフォームごとのステータスを取得 |
-| `posts cancel <id>` | 予約投稿をキャンセル |
+| `posts cancel <id>` | 予約投稿・下書きをキャンセル |
 
-ステータス値: `posted`, `scheduled`, `processing`, `failed`
+ステータス値: `posted`, `scheduled`, `processing`, `failed`, `draft`
+
+下書きだけを見るには `posts list --status draft`。不要になった下書きは `posts cancel <id>` で取り消せる。
 
 **`posts create`には必ず`--data`フラグでJSONを渡すこと。** stdinパイプ（`cat | node ... posts create`）は動作しない。
 
@@ -158,6 +174,7 @@ npx skills update
     }
   ],
   "scheduled_at": "2026-04-01T10:00:00Z",
+  "draft": false,
   "media_id": "動画投稿のみ",
   "media_ids": ["画像投稿のみ"],
   "thumbnail_time": 5.5
@@ -171,12 +188,13 @@ npx skills update
 | `category` | 常に | `text`, `image`, `video` のいずれか |
 | `targets` | 常に | 1つ以上のターゲット |
 | `targets[].connection_id` | 常に | `connections` コマンドで取得 |
-| `targets[].caption` | 常に | プラットフォームごとのキャプション。1文字以上（空文字はAPIが400で拒否）。ユーザーがキャプションを「後で」と保留しているときは、空文字や仮テキストで勝手に埋めず、確定してから投稿を作成する |
-| `targets[].youtube_title` | YouTube | YouTubeの場合は必須 |
+| `targets[].caption` | 下書き以外では常に | プラットフォームごとのキャプション。1文字以上（空文字はAPIが400で拒否）。`draft: true` のときだけ省略できる。公開する投稿でユーザーがキャプションを「後で」と保留しているときは、空文字や仮テキストで勝手に埋めず、確定してから投稿を作成する（保留のまま形にしたいなら下書きにする） |
+| `targets[].youtube_title` | 下書き以外のYouTube | YouTubeの場合は必須。`draft: true` のときだけ省略できる |
 | `targets[].is_ai_generated` | いいえ | TikTokのみ有効。`true`でTikTok上に「AI generated」ラベルを表示 |
 | `targets[].tiktok_draft` | いいえ | TikTokのみ有効（動画・画像）。`true`で公開せずTikTokアプリの受信箱へ下書きを送る。TikTok以外のターゲットでは無視される |
 | `targets[].tiktok_auto_add_music` | いいえ | TikTokへの画像投稿のみ有効。`true`でTikTokのおすすめ音楽を自動で付ける |
 | `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
+| `draft` | いいえ | `true` でSNSへ配信せず下書きとして保存。`scheduled_at` との併用は400（`draft cannot be used with scheduled_at`） |
 | `media_id` | `video` のみ | `media upload` で取得 |
 | `media_ids` | `image` のみ | `media upload` で取得したIDの配列。1件以上。上限は投稿先のうち最も厳しいプラットフォームの枚数上限（X 4枚、Instagram・Facebook 10枚、Threads 20枚、TikTok 35枚） |
 | `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
@@ -222,10 +240,29 @@ npx skills update
   "thumbnail_time": 3.0,
   "targets": [
     {"connection_id": "conn_yt", "caption": "ぜひ見てください！ #youtube", "youtube_title": "動画タイトル"},
-    {"connection_id": "conn_tt", "caption": "ぜひ見てください！ #tiktok"}
+    {"connection_id": "conn_tt", "caption": "ぜひ見てください！ #tiktok"},
+    {"connection_id": "conn_x", "caption": "ぜひ見てください！"}
   ]
 }'
 ```
+
+### 下書きの作成
+
+`draft` に `true` を指定すると、SNSへは配信せずpost mesh内に下書きとして保存されます:
+
+```bash
+./scripts/post-mesh.js posts create --data '{
+  "category": "text",
+  "draft": true,
+  "targets": [{"connection_id": "conn_x", "caption": "あとで見直す下書きです"}]
+}'
+```
+
+- レスポンスの `data.status` は `draft` になる。SNSには何も投稿されない
+- `scheduled_at` との併用は400エラー（`draft cannot be used with scheduled_at`）
+- 下書きでは `targets[].caption` と `targets[].youtube_title` を省略できる（内容が固まっていなくてもよい）。公開する投稿では必須
+- 一覧は `posts list --status draft`、取り消しは `posts cancel <id>`
+- **下書きから公開（即時・予約）への昇格はWebアプリの編集画面でのみ可能。** APIからは昇格できないので、下書きを作ったらその旨をユーザーに伝える
 
 ### TikTokへの下書き送信
 
@@ -239,6 +276,7 @@ npx skills update
 }'
 ```
 
+- post mesh内の下書き（`draft: true`）とは別機能。送り先はTikTokアプリで、post meshには下書きが残らない
 - 動画の下書きにはキャプションが送られない（TikTokアプリ側で入力する）
 - 保留中の下書きは24時間あたり5件まで
 - `tiktok_auto_add_music: true` との同時指定は400エラー（`tiktok_auto_add_music cannot be used with tiktok_draft`）
@@ -301,9 +339,9 @@ npx skills update
 
 予約投稿の場合、ステータスは即座に `scheduled` になるためポーリング不要。
 
-## 予約投稿のキャンセル
+## 予約投稿・下書きのキャンセル
 
-`can_cancel: true` の投稿のみキャンセル可能:
+`can_cancel: true` の投稿のみキャンセル可能（予約中の投稿と下書きが対象）:
 
 ```bash
 ./scripts/post-mesh.js posts cancel <post-id>
@@ -313,11 +351,11 @@ npx skills update
 
 APIを呼び出す前に、まずユーザーと会話してください。何を投稿したいのか、どこに投稿するのかを理解してからAPIを使います。
 
-1. **意図を確認** — ユーザーに何を投稿したいか（テキスト/画像/動画）、どのプラットフォームに投稿するか、即時か予約かを聞く
+1. **意図を確認** — ユーザーに何を投稿したいか（テキスト/画像/動画）、どのプラットフォームに投稿するか、即時か予約か下書きかを聞く
 2. **連携アカウントを確認し、ユーザーに選んでもらう** — `connections` で利用可能なアカウントを取得。ユーザーが選んだカテゴリに対応するプラットフォームのみ表示:
    - **テキスト**: X, Threads, Facebook
    - **画像**: Instagram, TikTok, X, Threads, Facebook
-   - **動画**: YouTube, TikTok, Instagram, Threads
+   - **動画**: YouTube, TikTok, Instagram, X, Threads
 
    プラットフォームごとにグループ化して表示:
    ```
