@@ -193,7 +193,7 @@ npx skills update
 | `targets[].is_ai_generated` | いいえ | TikTokのみ有効。`true`でTikTok上に「AI generated」ラベルを表示 |
 | `targets[].tiktok_draft` | いいえ | TikTokのみ有効（動画・画像）。`true`で公開せずTikTokアプリの受信箱へ下書きを送る。TikTok以外のターゲットでは無視される |
 | `targets[].tiktok_auto_add_music` | いいえ | TikTokへの画像投稿のみ有効。`true`でTikTokのおすすめ音楽を自動で付ける |
-| `targets[].tiktok_privacy_level` | いいえ | TikTokのみ有効。この投稿を見せる相手。省略すると全員に公開。選べる値はアカウントによって変わる（「TikTokの公開範囲」の節を参照）。`tiktok_draft` との同時指定は400 |
+| `targets[].tiktok_privacy_level` | いいえ | TikTokのみ有効。`PUBLIC_TO_EVERYONE`（既定）または `SELF_ONLY`。非公開アカウントでは前者を選べない（「TikTokの公開範囲」の節を参照）。`tiktok_draft` との同時指定は400 |
 | `targets[].tiktok_allow_comment` | いいえ | TikTokのみ有効。`false`でコメントを禁止。省略すると許可 |
 | `targets[].tiktok_allow_duet` | いいえ | TikTokへの動画投稿のみ有効。`false`でデュエットを禁止。省略すると許可 |
 | `targets[].tiktok_allow_stitch` | いいえ | TikTokへの動画投稿のみ有効。`false`でステッチを禁止。省略すると許可 |
@@ -288,34 +288,29 @@ npx skills update
 
 ### TikTokの公開範囲
 
-`targets[].tiktok_privacy_level` でこの投稿を見せる相手を指定します。指定できる値は4つです。
+`targets[].tiktok_privacy_level` でこの投稿を見せる相手を指定します。指定できる値は2つです。
 
 | 値 | 意味 |
 |----|------|
-| `PUBLIC_TO_EVERYONE` | 全員 |
-| `FOLLOWER_OF_CREATOR` | フォロワー |
-| `MUTUAL_FOLLOW_FRIENDS` | 相互フォロー中の友達 |
+| `PUBLIC_TO_EVERYONE` | 全員（省略時） |
 | `SELF_ONLY` | 自分のみ |
 
-ただし1つのアカウントが実際に選べるのは常に3つで、アカウントの公開設定によって入れ替わります。
+TikTok自体はフォロワー限定・相互フォロー限定も持ちますが、post meshでは扱いません。
 
-- 公開アカウント: `PUBLIC_TO_EVERYONE` / `MUTUAL_FOLLOW_FRIENDS` / `SELF_ONLY`
-- 非公開アカウント: `FOLLOWER_OF_CREATOR` / `MUTUAL_FOLLOW_FRIENDS` / `SELF_ONLY`
-
-つまり非公開アカウントは全員への公開ができません。
+非公開アカウントは全員への公開ができないため、`SELF_ONLY` のみになります。
 
 ```bash
 ./scripts/post-mesh.js posts create --data '{
   "category": "video",
   "media_id": "media_abc",
-  "targets": [{"connection_id": "conn_tt", "caption": "フォロワー限定です", "tiktok_privacy_level": "FOLLOWER_OF_CREATOR"}]
+  "targets": [{"connection_id": "conn_tt", "caption": "自分だけに公開します", "tiktok_privacy_level": "SELF_ONLY"}]
 }'
 ```
 
 **選べない値を指定した場合**、投稿は作成されず400エラーになります。エラーコードは `TIKTOK_PRIVACY_LEVEL_UNAVAILABLE` で、メッセージにそのアカウントで選べる値が含まれます。
 
 ```
-このTikTokアカウントでは公開範囲に「全員」を選べません。「フォロワー」「相互フォロー中の友達」「自分のみ」から選んでください。
+このTikTokアカウントでは公開範囲に「全員」を選べません。「自分のみ」から選んでください。
 ```
 
 投稿は1件も作られていないので、選び直して同じリクエストを送り直せます。
@@ -323,7 +318,7 @@ npx skills update
 **ユーザーへの確認**
 
 - 省略すると全員に公開されます。ユーザーが公開範囲を指示していない場合、通常はそのまま省略して構いません
-- ただし上記のエラーが返ってきたときは、勝手に値を選ばずユーザーに確認してください。「フォロワー限定と自分のみが選べますが、どちらにしますか」のように、選べる値を示して聞きます
+- ただし上記のエラーが返ってきたときは、勝手に `SELF_ONLY` に切り替えず、非公開アカウントのため全員には公開できないことを伝えて確認してください
 - 「限定公開で」「こっそり出したい」のような曖昧な指示があった場合も、どの範囲かを確認してから指定します
 
 ### TikTokのコメント・デュエット・ステッチ
