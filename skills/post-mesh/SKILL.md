@@ -193,6 +193,10 @@ npx skills update
 | `targets[].is_ai_generated` | いいえ | TikTokのみ有効。`true`でTikTok上に「AI generated」ラベルを表示 |
 | `targets[].tiktok_draft` | いいえ | TikTokのみ有効（動画・画像）。`true`で公開せずTikTokアプリの受信箱へ下書きを送る。TikTok以外のターゲットでは無視される |
 | `targets[].tiktok_auto_add_music` | いいえ | TikTokへの画像投稿のみ有効。`true`でTikTokのおすすめ音楽を自動で付ける |
+| `targets[].tiktok_privacy_level` | いいえ | TikTokのみ有効。`PUBLIC_TO_EVERYONE`（既定）または `SELF_ONLY`。非公開アカウントでは前者を選べない（「TikTokの公開範囲」の節を参照）。`tiktok_draft` との同時指定は400 |
+| `targets[].tiktok_allow_comment` | いいえ | TikTokのみ有効。`false`でコメントを禁止。省略すると許可 |
+| `targets[].tiktok_allow_duet` | いいえ | TikTokへの動画投稿のみ有効。`false`でデュエットを禁止。省略すると許可 |
+| `targets[].tiktok_allow_stitch` | いいえ | TikTokへの動画投稿のみ有効。`false`でステッチを禁止。省略すると許可 |
 | `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
 | `draft` | いいえ | `true` でSNSへ配信せず下書きとして保存。`scheduled_at` との併用は400（`draft cannot be used with scheduled_at`） |
 | `media_id` | `video` のみ | `media upload` で取得 |
@@ -280,6 +284,49 @@ npx skills update
 - 動画の下書きにはキャプションが送られない（TikTokアプリ側で入力する）
 - 保留中の下書きは24時間あたり5件まで
 - `tiktok_auto_add_music: true` との同時指定は400エラー（`tiktok_auto_add_music cannot be used with tiktok_draft`）
+- `tiktok_privacy_level` との同時指定も400エラー。下書きの公開範囲はユーザーがTikTokアプリで決める
+
+### TikTokの公開範囲
+
+`targets[].tiktok_privacy_level` でこの投稿を見せる相手を指定します。指定できる値は2つです。
+
+| 値 | 意味 |
+|----|------|
+| `PUBLIC_TO_EVERYONE` | 全員（省略時） |
+| `SELF_ONLY` | 自分のみ |
+
+TikTok自体はフォロワー限定・相互フォロー限定も持ちますが、post meshでは扱いません。
+
+非公開アカウントは全員への公開ができないため、`SELF_ONLY` のみになります。
+
+```bash
+./scripts/post-mesh.js posts create --data '{
+  "category": "video",
+  "media_id": "media_abc",
+  "targets": [{"connection_id": "conn_tt", "caption": "自分だけに公開します", "tiktok_privacy_level": "SELF_ONLY"}]
+}'
+```
+
+**選べない値を指定した場合**、投稿は作成されず400エラーになります。エラーコードは `TIKTOK_PRIVACY_LEVEL_UNAVAILABLE` で、メッセージにそのアカウントで選べる値が含まれます。
+
+```
+このTikTokアカウントでは公開範囲に「全員」を選べません。「自分のみ」から選んでください。
+```
+
+投稿は1件も作られていないので、選び直して同じリクエストを送り直せます。
+
+**ユーザーへの確認**
+
+- 省略すると全員に公開されます。ユーザーが公開範囲を指示していない場合、通常はそのまま省略して構いません
+- ただし上記のエラーが返ってきたときは、勝手に `SELF_ONLY` に切り替えず、非公開アカウントのため全員には公開できないことを伝えて確認してください
+- 「限定公開で」「こっそり出したい」のような曖昧な指示があった場合も、どの範囲かを確認してから指定します
+
+### TikTokのコメント・デュエット・ステッチ
+
+`targets[].tiktok_allow_comment` / `tiktok_allow_duet` / `tiktok_allow_stitch` に `false` を指定すると、その操作を禁止できます。省略するとすべて許可です。
+
+- デュエットとステッチは動画投稿のみ。画像投稿で指定すると400エラー
+- TikTokアカウント側でこれらが無効になっている場合、`true` を指定しても無効のまま投稿されます。エラーにはなりません
 
 ### TikTokへの画像投稿とおすすめ音楽
 

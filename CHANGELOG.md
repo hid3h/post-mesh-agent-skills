@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-08-10
+
+### TikTokの公開範囲とコメント・デュエット・ステッチの指定に対応
+
+- `targets[].tiktok_privacy_level` を記載（この投稿を見せる相手。省略すると全員に公開。`tiktok_draft` との併用は400）
+- 「TikTokの公開範囲」節を追加。post meshが扱うのは `PUBLIC_TO_EVERYONE` と `SELF_ONLY` の2つで、非公開アカウントでは前者を選べないことを明記
+- 選べない値を指定すると投稿は作成されず `TIKTOK_PRIVACY_LEVEL_UNAVAILABLE` で400になること、エラーメッセージに選べる値が含まれるので選び直して再送できることを記載
+- エラーが返ったときは勝手に値を選ばず、選べる値を示してユーザーに確認する手順を追加
+- `targets[].tiktok_allow_comment` / `tiktok_allow_duet` / `tiktok_allow_stitch` を記載（`false`で禁止。デュエットとステッチは動画のみで、画像投稿での指定は400。アカウント側で無効な場合は`true`でも無効のまま投稿される）
+
 ## 2026-07-30
 
 ### 下書き保存（`draft: true`）を正式記載し「下書き」依頼の振り分けを更新
