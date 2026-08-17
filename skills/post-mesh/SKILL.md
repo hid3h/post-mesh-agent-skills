@@ -4,8 +4,8 @@ description: >
   post mesh を使って YouTube、TikTok、Instagram、X (Twitter)、Threads、Facebook への
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
-  テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-07-30
+  テキスト投稿、画像投稿、動画投稿、ツリー投稿（連鎖投稿）、メディアアップロード、予約投稿、投稿ステータス確認に対応。
+last-updated: 2026-08-17
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -13,14 +13,16 @@ allowed-tools: Bash(./scripts/post-mesh.js:*)
 
 post mesh は複数のSNSプラットフォームへの投稿を一括で作成・予約・管理できるサービスです。
 
-| プラットフォーム | テキスト | 画像 | 動画 |
-|------------------|----------|------|------|
-| YouTube          |          |      | o    |
-| TikTok           |          | o    | o    |
-| Instagram        |          | o    | o    |
-| X                | o        | o    | o    |
-| Threads          | o        | o    | o    |
-| Facebook         | o        | o    |      |
+| プラットフォーム | テキスト | 画像 | 動画 | ツリー |
+|------------------|----------|------|------|--------|
+| YouTube          |          |      | o    |        |
+| TikTok           |          | o    | o    |        |
+| Instagram        |          | o    | o    |        |
+| X                | o        | o    | o    | o      |
+| Threads          | o        | o    | o    | o      |
+| Facebook         | o        | o    |      |        |
+
+ツリー（連鎖投稿）はXとThreadsのみ。詳細は「ツリー投稿」の節を参照。
 
 ## 「下書き」という依頼の扱い
 
@@ -181,11 +183,13 @@ npx skills update
 }
 ```
 
+ツリー投稿だけは本文とメディアの持ち方が違う（`targets` ではなく `tree_cards` が持つ）。「ツリー投稿」の節を参照。
+
 ### フィールド
 
 | フィールド | 必須 | 備考 |
 |------------|------|------|
-| `category` | 常に | `text`, `image`, `video` のいずれか |
+| `category` | 常に | `text`, `image`, `video`, `tree` のいずれか |
 | `targets` | 常に | 1つ以上のターゲット |
 | `targets[].connection_id` | 常に | `connections` コマンドで取得 |
 | `targets[].caption` | 下書き以外では常に | プラットフォームごとのキャプション。1文字以上（空文字はAPIが400で拒否）。`draft: true` のときだけ省略できる。公開する投稿でユーザーがキャプションを「後で」と保留しているときは、空文字や仮テキストで勝手に埋めず、確定してから投稿を作成する（保留のまま形にしたいなら下書きにする） |
@@ -202,6 +206,11 @@ npx skills update
 | `media_id` | `video` のみ | `media upload` で取得 |
 | `media_ids` | `image` のみ | `media upload` で取得したIDの配列。1件以上。上限は投稿先のうち最も厳しいプラットフォームの枚数上限（X 4枚、Instagram・Facebook 10枚、Threads 20枚、TikTok 35枚） |
 | `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
+| `tree_cards` | `tree` のみ | ツリーのカードの配列。1件以上。本文とメディアはここに持つ |
+| `tree_cards[].caption` | いいえ | そのカードの本文。文字列またはnull |
+| `tree_cards[].media_ids` | いいえ | そのカードに付けるメディア。`media upload` で取得したIDの配列 |
+
+`category` が `tree` のときは `targets[]` に `connection_id` 以外を指定できない。キャプション・メディアはカード側（`tree_cards`）に書く。
 
 ### テキスト投稿
 
@@ -249,6 +258,37 @@ npx skills update
   ]
 }'
 ```
+
+### ツリー投稿
+
+`category` に `tree` を指定すると、1つの投稿を複数のカードに分けて連ねるツリー（連鎖投稿）を作成できます。投稿先はXとThreadsのみです。
+
+他のカテゴリと違い、本文とメディアは `targets` ではなくカード（`tree_cards`）が持ちます。`targets[]` には `connection_id` だけを渡します:
+
+```bash
+# 1. カードに付けるメディアがあればアップロード
+./scripts/post-mesh.js media upload ./video.mp4
+
+# 2. tree_cards を指定して投稿
+./scripts/post-mesh.js posts create --data '{
+  "category": "tree",
+  "targets": [{"connection_id": "conn_threads"}],
+  "tree_cards": [
+    {"caption": "1枚目の本文", "media_ids": ["media_abc"]},
+    {"caption": "2枚目の本文"},
+    {"caption": "3枚目の本文"}
+  ]
+}'
+```
+
+- `tree_cards` は1件以上の配列。各カードは `{"caption": ..., "media_ids": [...]}` で、どちらも省略できるが本文とメディアの両方が空のカードは400。公開する投稿ではカードが2枚以上必要（1枚だけなら通常の投稿にする）
+- `targets[].caption` / `youtube_title` / `is_ai_generated` / `tiktok_draft` / `tiktok_auto_add_music` を指定すると400（`targets[].caption is not supported for tree posts`）
+- X・Threads以外の投稿先を指定すると400（`tree posts only support X and Threads targets`）
+- 同じSNSアカウントを2回指定すると400。投稿先ごとに違うカードを渡すこともできない（カードは全投稿先で共通）
+- 本文の上限は1カードあたり X 280文字、Threads 500文字
+- 1カードに付けられるメディアは X 4件まで（画像は4枚、動画は1本、画像と動画の混在不可）、Threads 20件まで（混在可）
+- `scheduled_at` による予約と `draft: true` による下書きは他のカテゴリと同じように使える（予約なら上の例に `"scheduled_at": "2026-08-19T07:30:00Z"` を足すだけ）
+- レスポンスの `data.tree_cards` に送ったカードがそのまま入る。`data.status` / `data.scheduled_at` / `data.can_cancel` も他のカテゴリと同じ
 
 ### 下書きの作成
 
@@ -398,11 +438,12 @@ TikTok自体はフォロワー限定・相互フォロー限定も持ちます�
 
 APIを呼び出す前に、まずユーザーと会話してください。何を投稿したいのか、どこに投稿するのかを理解してからAPIを使います。
 
-1. **意図を確認** — ユーザーに何を投稿したいか（テキスト/画像/動画）、どのプラットフォームに投稿するか、即時か予約か下書きかを聞く
+1. **意図を確認** — ユーザーに何を投稿したいか（テキスト/画像/動画/ツリー）、どのプラットフォームに投稿するか、即時か予約か下書きかを聞く
 2. **連携アカウントを確認し、ユーザーに選んでもらう** — `connections` で利用可能なアカウントを取得。ユーザーが選んだカテゴリに対応するプラットフォームのみ表示:
    - **テキスト**: X, Threads, Facebook
    - **画像**: Instagram, TikTok, X, Threads, Facebook
    - **動画**: YouTube, TikTok, Instagram, X, Threads
+   - **ツリー**: X, Threads
 
    プラットフォームごとにグループ化して表示:
    ```
