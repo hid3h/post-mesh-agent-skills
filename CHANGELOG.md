@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-27
+
+### `account` コマンドを削除し、APIキー検証を `connections` に変更
+
+- アカウント情報の取得はスキルの投稿フローに必須ではないため、APIの `GET /api/v1/account` 廃止に合わせて依存を外した
+- `account` コマンドを削除（`scripts/post-mesh.js`、SKILL.md。README.mdには元から記載なし）
+- `setup` のAPIキー有効性検証を `GET /account` から `GET /connections` に変更。成功時の出力は `account` から `connections` になる
+- 「セットアップの確認」の実行例から `account` を削除し、`config show` のみに変更
+
 ## 2026-08-10
 
 ### TikTokの公開範囲とコメント・デュエット・ステッチの指定に対応

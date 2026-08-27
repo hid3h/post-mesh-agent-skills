@@ -141,13 +141,13 @@ async function cmdSetup(args) {
   fs.writeFileSync(configPath, JSON.stringify({ apiKey }, null, 2));
 
   // Verify the key
-  const result = await request("GET", "/account", apiKey);
+  const result = await request("GET", "/connections", apiKey);
   if (result.ok) {
     out({
       success: true,
       message: `API key saved to ${scope} config`,
       config_path: configPath,
-      account: result.data,
+      connections: result.data,
     });
   } else {
     out({
@@ -169,12 +169,6 @@ async function cmdConfigShow() {
   }
   const masked = config.apiKey.substring(0, 11) + "..." + config.apiKey.slice(-4);
   out({ configured: true, source: config.source, api_key: masked });
-}
-
-async function cmdAccount() {
-  const apiKey = requireApiKey();
-  const result = await request("GET", "/account", apiKey);
-  out(result);
 }
 
 async function cmdConnections(args) {
@@ -317,7 +311,6 @@ async function cmdPostsCancel(args) {
 const COMMANDS = {
   setup: cmdSetup,
   "config show": cmdConfigShow,
-  account: cmdAccount,
   connections: cmdConnections,
   "media upload": cmdMediaUpload,
   "posts create": cmdPostsCreate,
