@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-07-30
+last-updated: 2026-08-27
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -72,12 +72,11 @@ npx skills update
 
 ```bash
 ./scripts/post-mesh.js config show
-./scripts/post-mesh.js account
 ```
 
 ## CLIコマンド
 
-すべてのコマンドはJSONを出力します。レスポンスは `{ "ok": true, "status": 200, "data": ... }` の形で、実データは `data` の中にあります（`connections` は `data` が配列、`account` は `data.user`、`posts get`/`posts create` は `data.platforms[]`）。
+すべてのコマンドはJSONを出力します。レスポンスは `{ "ok": true, "status": 200, "data": ... }` の形で、実データは `data` の中にあります（`connections` は `data` が配列、`posts get`/`posts create` は `data.platforms[]`）。
 
 ### 設定
 
@@ -85,7 +84,6 @@ npx skills update
 |----------|------|
 | `setup --key <KEY> [--global]` | APIキーを保存 |
 | `config show` | 現在の設定を表示（キーはマスクされる） |
-| `account` | アカウント情報を取得（ユーザーIDとメールアドレス） |
 
 ### 連携アカウント
 
