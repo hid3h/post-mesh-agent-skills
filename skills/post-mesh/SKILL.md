@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-08-27
+last-updated: 2026-10-05
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -28,9 +28,11 @@ post meshは投稿を下書きとして保存できる。ボディに `draft: tr
 
 ただし「下書き」という言葉が指しうる機能は3つあり、どれも意味が違う。**ユーザーが「下書き」「下書き投稿」「draft」と言ったとき、どれを指すか曖昧なら、勝手にマッピングせず次の選択肢を提示して確認する**:
 
-1. **post meshに下書き保存**（`draft: true`）— SNSには出ない。post meshに保存され、後でWebアプリから公開する
+1. **post meshに下書き保存**（`draft: true`）— SNSには出ない。post meshに保存され、後でWebアプリから公開する。`scheduled_at`を併用すると予約日時つきの下書きになるが、その日時が来ても公開されない
 2. **TikTokアプリの受信箱への下書き送信**（`tiktok_draft`、TikTokのみ）— post mesh内ではなくTikTokアプリ側に届く（「TikTokへの下書き送信」の節を参照）
-3. **予約投稿**（`scheduled_at`）— 下書きではなく、指定時刻に**自動公開される**
+3. **予約投稿**（`draft`を付けずに`scheduled_at`）— 下書きではなく、指定時刻に**自動公開される**
+
+「◯日に出す予定で下書きにしておいて」のように日時つきで下書きを頼まれたら、1の予約日時つきの下書きにする。日時を指定されただけで3の予約投稿にしない（自動公開されてしまう）。自動公開してよいのか読み取れないときは確認する。
 
 「まず下書きにしておいて、後で公開して」と言われた場合、下書きの作成まではAPIでできるが、**下書きから公開（即時・予約）への昇格はpost meshのWebアプリの編集画面でしかできない**。APIに投稿の更新エンドポイントが無いため、このスキルからは昇格できない。下書きを作った時点でその旨を伝え、公開はWebアプリ（[post-mesh.com](https://post-mesh.com)）で行ってもらう。
 
@@ -128,7 +130,9 @@ npx skills update
 
 ステータス値: `posted`, `scheduled`, `processing`, `failed`, `draft`
 
-下書きだけを見るには `posts list --status draft`。不要になった下書きは `posts cancel <id>` で取り消せる。
+下書きだけを見るには `posts list --status draft`。不要になった下書きは `posts cancel <id>` で取り消せる。`--status`を省略した一覧に下書きは含まれない。
+
+一覧は`display_at`の新しい順に返る。`display_at`は、予約済みの投稿と予約日時つきの下書きでは予約日時、予約日時のない下書きでは最後に保存した日時。下書きに予約日時があるかどうかは、`posts get <id>`の`scheduled_at`（無ければ`null`）で確認する。
 
 **`posts create`には必ず`--data`フラグでJSONを渡すこと。** stdinパイプ（`cat | node ... posts create`）は動作しない。
 
@@ -195,8 +199,8 @@ npx skills update
 | `targets[].tiktok_allow_comment` | いいえ | TikTokのみ有効。`false`でコメントを禁止。省略すると許可 |
 | `targets[].tiktok_allow_duet` | いいえ | TikTokへの動画投稿のみ有効。`false`でデュエットを禁止。省略すると許可 |
 | `targets[].tiktok_allow_stitch` | いいえ | TikTokへの動画投稿のみ有効。`false`でステッチを禁止。省略すると許可 |
-| `scheduled_at` | いいえ | ISO 8601形式の未来の日時。省略で即時投稿 |
-| `draft` | いいえ | `true` でSNSへ配信せず下書きとして保存。`scheduled_at` との併用は400（`draft cannot be used with scheduled_at`） |
+| `scheduled_at` | いいえ | ISO 8601形式の日時。省略で即時投稿、指定で予約投稿（未来の日時が必要）。`draft: true`と併用すると予約日時つきの下書きになり、過去の日時も指定できる |
+| `draft` | いいえ | `true` でSNSへ配信せず下書きとして保存。`scheduled_at`を併用すると予約日時つきの下書きになる（その日時が来ても配信されない） |
 | `media_id` | `video` のみ | `media upload` で取得 |
 | `media_ids` | `image` のみ | `media upload` で取得したIDの配列。1件以上。上限は投稿先のうち最も厳しいプラットフォームの枚数上限（X 4枚、Instagram・Facebook 10枚、Threads 20枚、TikTok 35枚） |
 | `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
@@ -261,10 +265,26 @@ npx skills update
 ```
 
 - レスポンスの `data.status` は `draft` になる。SNSには何も投稿されない
-- `scheduled_at` との併用は400エラー（`draft cannot be used with scheduled_at`）
 - 下書きでは `targets[].caption` と `targets[].youtube_title` を省略できる（内容が固まっていなくてもよい）。公開する投稿では必須
 - 一覧は `posts list --status draft`、取り消しは `posts cancel <id>`
 - **下書きから公開（即時・予約）への昇格はWebアプリの編集画面でのみ可能。** APIからは昇格できないので、下書きを作ったらその旨をユーザーに伝える
+
+`scheduled_at`を併用すると、予約日時つきの下書きになります。使う順番の目印として日時を持たせるもので、その日時が来ても配信されません:
+
+```bash
+./scripts/post-mesh.js posts create --data '{
+  "category": "text",
+  "draft": true,
+  "scheduled_at": "2026-11-01T21:00:00+09:00",
+  "targets": [{"connection_id": "conn_x", "caption": "11月1日に出す予定の下書きです"}]
+}'
+```
+
+- レスポンスの `data.status` は `draft`、`data.scheduled_at` に指定した日時が入る
+- 予約日時つきの下書きは、Webアプリの投稿一覧では予約日時の位置に並び、カレンダーにも下書きとして表示される
+- 下書きの`scheduled_at`には過去の日時も指定できる（下書きでない投稿では400）
+- 予約日時の変更・削除もWebアプリの編集画面で行う。編集画面で「予約」を選べば、その日時のまま予約投稿に切り替えられる
+- 日時を付けたことで自動公開されると誤解されやすいので、作成後は「下書きなので、この日時になっても投稿されない」ことをユーザーに伝える
 
 ### TikTokへの下書き送信
 
