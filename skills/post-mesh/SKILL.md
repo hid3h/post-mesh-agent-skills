@@ -5,7 +5,7 @@ description: >
   投稿を作成・予約・管理する。SNSへの投稿、予約投稿、マルチプラットフォーム同時投稿、
   「post mesh」、クロスポスト、同時投稿などのキーワードが含まれる場合にこのスキルを使用する。
   テキスト投稿、画像投稿、動画投稿、メディアアップロード、予約投稿、投稿ステータス確認に対応。
-last-updated: 2026-10-05
+last-updated: 2026-10-23
 allowed-tools: Bash(./scripts/post-mesh.js:*)
 ---
 
@@ -202,7 +202,7 @@ npx skills update
 | `scheduled_at` | いいえ | ISO 8601形式の日時。省略で即時投稿、指定で予約投稿（未来の日時が必要）。`draft: true`と併用すると予約日時つきの下書きになり、過去の日時も指定できる |
 | `draft` | いいえ | `true` でSNSへ配信せず下書きとして保存。`scheduled_at`を併用すると予約日時つきの下書きになる（その日時が来ても配信されない） |
 | `media_id` | `video` のみ | `media upload` で取得 |
-| `media_ids` | `image` のみ | `media upload` で取得したIDの配列。1件以上。上限は投稿先のうち最も厳しいプラットフォームの枚数上限（X 4枚、Instagram・Facebook 10枚、Threads 20枚、TikTok 35枚） |
+| `media_ids` | `image` のみ | `media upload` で取得したIDの配列。1件以上。上限は投稿先のうち最も厳しいプラットフォームの枚数上限（X 4枚、Facebook 10枚、Instagram・Threads 20枚、TikTok 35枚） |
 | `thumbnail_time` | いいえ | サムネイル位置（秒）。動画のみ |
 
 ### テキスト投稿
